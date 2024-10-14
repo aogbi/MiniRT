@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:52:26 by aogbi             #+#    #+#             */
-/*   Updated: 2024/10/14 16:53:46 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/10/14 17:13:50 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,6 @@
 #define MINIRT_H
 
 #include <stdio.h>
-#include "Libft/libft.h"
+#include "../Libft/libft.h"
 
 #endif
