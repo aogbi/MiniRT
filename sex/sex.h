@@ -1,19 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   sex.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/14 16:52:14 by aogbi             #+#    #+#             */
-/*   Updated: 2024/10/15 16:18:15 by aogbi            ###   ########.fr       */
+/*   Created: 2024/10/19 05:32:46 by aogbi             #+#    #+#             */
+/*   Updated: 2024/10/19 06:28:59 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/minirt.h"
+#ifndef SEX_H
+#define SEX_H
 
-int main(int argc, char **argv)
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+
+typedef struct s_micro t_micro;
+
+struct s_micro
 {
-    
-    return (0);
-}
+    char **cmd;
+    int size;
+    t_micro *next;
+};
+
+#endif // SEX_H
