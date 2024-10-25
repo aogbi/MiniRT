@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: guest <guest@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:52:26 by aogbi             #+#    #+#             */
-/*   Updated: 2024/10/25 13:58:11 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/10/25 14:11:10 by guest            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,19 @@ typedef struct s_data
     void	*win_ptr;
     t_img   img;
 }	t_data;
+
+typedef struct {
+    double x, y, z;
+} Vector3;
+
+typedef struct {
+    Vector3 center;
+    double radius;
+} Sphere;
+
+typedef struct {
+    Vector3 origin;
+    Vector3 direction;
+} Ray;
 
 #endif
