@@ -12,8 +12,6 @@
 
 #include "includes/minirt.h"
 
-
-
 Vector3 vector_create(double x, double y, double z) {
     Vector3 v = {x, y, z};
     return v;
@@ -45,12 +43,15 @@ double ray_sphere_intersect(Ray ray, Sphere sphere) {
     }
     
     double t = (-b - sqrt(discriminant)) / (2.0 * a);
-    return t > 0 ? t : -1.0;
+    if (t > 0)
+        return (t);
+    return (-1.0);
 }
 
 double calculate_lighting(Vector3 point, Vector3 normal) {
     Vector3 light_dir = vector_normalize(vector_create(-1.0, -1.0, -1.0));
     double intensity = -vector_dot(normal, light_dir);
-    return intensity > 0 ? intensity : 0;
+    if (intensity > 0) 
+        return intensity;
+    return 0;
 }
-
