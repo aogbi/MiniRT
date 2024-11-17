@@ -21,8 +21,7 @@
 #define WIDTH 900
 #define HEIGHT 600
 
-typedef struct s_img
-{
+typedef struct {
     void	*mlx_img;
     char	*addr;
     int		bpp;
@@ -32,8 +31,7 @@ typedef struct s_img
     int        height;
 }	t_img;
 
-typedef struct s_data
-{
+typedef struct {
     void	*mlx_ptr;
     void	*win_ptr;
     t_img   img;
@@ -52,5 +50,19 @@ typedef struct {
     Vector3 origin;
     Vector3 direction;
 } Ray;
+
+typedef struct {
+    Vector3 position;
+    Vector3 direction;
+    float fov;
+    float aspect_ratio;
+} Camera;
+
+Vector3	vector_create(double x, double y, double z);
+Vector3	vector_subtract(Vector3 v1, Vector3 v2);
+double	vector_dot(Vector3 v1, Vector3 v2);
+Vector3	vector_normalize(Vector3 v);
+double	ray_sphere_intersect(Ray ray, Sphere sphere);
+double	calculate_lighting(Vector3 point, Vector3 normal);
 
 #endif
