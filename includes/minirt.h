@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:52:26 by aogbi             #+#    #+#             */
-/*   Updated: 2025/01/02 01:46:34 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/01/02 02:28:40 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ typedef struct s_cylinder
 {
 	t_vector3			center;
 	t_vector3			axis;
-	double				radius;
+	double				diameter;
 	double				height;
 	int					rgb;
 	struct s_cylinder	*next;

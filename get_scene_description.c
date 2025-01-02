@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:34:54 by aogbi             #+#    #+#             */
-/*   Updated: 2025/01/02 01:53:48 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/01/02 02:33:03 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,7 @@ int init_ambient(char **array, t_scenes *scenes)
 {
 	t_ambient_lightning	*ambient;
 
-	if (count_str_array(array) != 3)
+	if (scenes->ambient || count_str_array(array) != 3)
 		return (0);
 	ambient = malloc(sizeof(t_ambient_lightning));
 	if (!ambient)
@@ -147,7 +147,7 @@ int init_camera(char **array, t_scenes *scenes)
 	t_camera	*camera;
 	int			flag;
 
-	if (count_str_array(array) != 4)
+	if (scenes->ambient || count_str_array(array) != 4)
 		return (0);
 	else if (!ft_isnum(array[3]))
 		return (ft_str_array_free(array), 0);
@@ -170,7 +170,7 @@ int init_light(char **array, t_scenes *scenes)
 	t_light *light;
 	int flag;
 
-	if (count_str_array(array) != 4)
+	if (scenes->ambient || count_str_array(array) != 4)
 		return (0);
 	light = malloc(sizeof(t_light));
 	if (!light)
@@ -202,47 +202,73 @@ int init_sphere(char **array, t_scenes *scenes)
 	sphere->rgb = colors_range(array[3]);
 	if (!flag || !ft_isfloat(array[2]) || sphere->radius <= 0 || sphere->rgb == -1)
 		return (ft_str_array_free(array), free(sphere), 0);
-	scenes->sphere = sphere;
+	else if (!scenes->sphere)
+		scenes->sphere = sphere;
+	else
+	{
+		sphere->next = scenes->sphere;
+		scenes->sphere = sphere;
+	}
 	ft_str_array_free(array);
 	return (1);
 }
 
 int init_plane(char **array, t_scenes *scenes)
 {
-	// t_plane *plane;
+	t_plane *plane;
+	int flag;
 
-	// if (count_str_array(array) != 3)
-	// 	return (0);
-	// plane = malloc(sizeof(t_plane));
-	// if (!plane)
-	// 	return (0);
-	// plane->position = coordinates(ft_split(array[1], ','));
-	// plane->direction = coordinates(ft_split(array[2], ','));
-	// if (plane->direction.x == 0 && plane->direction.y == 0 && plane->direction.z == 0)
-	// 	return (free(plane), 0);
-	// plane->rgb = colors_range(array[3]);
-	// scenes->plane = plane;
+	if (count_str_array(array) != 3)
+		return (0);
+	plane = malloc(sizeof(t_plane));
+	if (!plane)
+		return (0);
+	flag = 1;
+	plane->position = coordinates(ft_split(array[1], ','), &flag);
+	plane->direction = coordinates(ft_split(array[2], ','), &flag);
+	plane->rgb = colors_range(array[3]);
+	if (!flag || plane->direction.x < 0 || plane->direction.x > 1 || plane->direction.y < 0 
+			|| plane->direction.y > 1 || plane->direction.z < 0 || plane->direction.z > 1 || plane->rgb == -1)
+		return (ft_str_array_free(array), free(plane), 0);
+	else if (!scenes->plane)
+		scenes->plane = plane;
+	else
+	{
+		plane->next = scenes->plane;
+		scenes->plane = plane;
+	}
+	ft_str_array_free(array);
 	return (1);
 }
 
 int init_cylinder(char **array, t_scenes *scenes)
 {
-	// t_cylinder *cylinder;
+	t_cylinder *cylinder;
+	int flag;
 
-	// if (ft_split_count(array) != 6)
-	// 	return (0);
-	// cylinder = malloc(sizeof(t_cylinder));
-	// if (!cylinder)
-	// 	return (0);
-	// cylinder->center = coordinates(ft_split(array[1], ','));
-	// cylinder->orientation = coordinates(ft_split(array[2], ','));
-	// if (!ft_isfloat(array[3]) || ft_atod(array[3]) <= 0 ||
-	// 	!ft_isfloat(array[4]) || ft_atod(array[4]) <= 0)
-	// 	return (free(cylinder), 0);
-	// cylinder->diameter = ft_atod(array[3]);
-	// cylinder->height = ft_atod(array[4]);
-	// cylinder->rgb = colors_range(array[5]);
-	// scenes->cylinder = cylinder;
+	if (ft_split_count(array) != 6)
+		return (0);
+	cylinder = malloc(sizeof(t_cylinder));
+	if (!cylinder)
+		return (0);
+	flag = 1;
+	cylinder->center = coordinates(ft_split(array[1], ','), &flag);
+	cylinder->axis = coordinates(ft_split(array[2], ','), &flag);
+	cylinder->diameter = ft_atod(array[3]);
+	cylinder->height = ft_atod(array[4]);
+	cylinder->rgb = colors_range(array[5]);
+	if (! flag || !ft_isfloat(array[3]) || cylinder->diameter <= 0 || cylinder->axis.x < 0 || cylinder->axis.x > 1 
+		|| cylinder->axis.y < 0 || cylinder->axis.y > 1 || cylinder->axis.z < 0 || cylinder->axis.z > 1 ||
+		!ft_isfloat(array[4]) || cylinder->height <= 0 || cylinder->rgb == -1)
+		return (ft_str_array_free(array), free(cylinder), 0);
+	if (!scenes->cylinder)
+		scenes->cylinder = cylinder;
+	else
+	{
+		cylinder->next = scenes->cylinder;
+		scenes->cylinder = cylinder;
+	}
+	ft_str_array_free(array);
 	return (1);
 }
 
@@ -280,6 +306,32 @@ int init_scenes(t_scenes *scenes)
 	return (0);
 }
 
+void free_scenes(t_scenes *scenes)
+{
+	if (scenes->camera)
+		free(scenes->camera);
+	if (scenes->light)
+		free(scenes->light);
+	if (scenes->ambient)
+		free(scenes->ambient);
+	while(scenes->sphere)
+	{
+		free(scenes->sphere);
+		scenes->sphere = scenes->sphere->next;
+	}
+	while(scenes->cylinder)
+	{
+		free(scenes->cylinder);
+		scenes->cylinder = scenes->cylinder->next;
+	}
+	while(scenes->plane)
+	{
+		free(scenes->plane);
+		scenes->plane = scenes->plane->next;
+	}
+	free(scenes);
+}
+
 t_scenes *scene_description(char *file_name)
 {
 	t_scenes *scenes;
@@ -296,7 +348,7 @@ t_scenes *scene_description(char *file_name)
 	while (line)
 	{
 		if (!description_line(scenes, line))
-			return (free(scenes), NULL);
+			return (free_scenes(scenes), NULL);
 		free(line);
 		line = get_next_line(fd);
 	}
