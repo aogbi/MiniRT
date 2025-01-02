@@ -3,105 +3,81 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: yhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/03 18:23:33 by aogbi             #+#    #+#             */
-/*   Updated: 2023/11/24 08:47:24 by aogbi            ###   ########.fr       */
+/*   Created: 2023/11/21 00:58:34 by yhadhadi          #+#    #+#             */
+/*   Updated: 2024/08/22 02:54:55 by yhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static unsigned int	numofstr(char const *s, char c)
+static size_t	count_subs(const char *str, char sep);
+static char		**extract_sub(char **strs, const char **str, char sep);
+
+char	**ft_split(const char *str, char sep)
 {
-	int	n;
-	int	x;
-	int	i;
+	char	**strs;
+	char	**p_strs;
 
-	n = 0;
-	i = 0;
-	x = 1;
-	while (s[i])
+	strs = (char **)malloc((count_subs(str, sep) + 1) * sizeof(char *));
+	if (!strs)
+		return (NULL);
+	p_strs = strs;
+	while (*str)
 	{
-		if (s[i] == c)
+		if (*str != sep)
 		{
-			i++;
-			x = 1;
-		}
-		else if (s[i++] != c && x)
-		{
-			x = 0;
-			n++;
-		}
-	}
-	return (n);
-}
-
-static int	count_char(char *str, char c)
-{
-	int	i;
-
-	i = 0;
-	if (str[i] != c)
-	{
-		while (str[i] != c && str[i])
-		{
-			i++;
-		}
-		return (i);
-	}
-	else
-		return (0);
-}
-
-static void	free_it(char **ptr, int j)
-{
-	while (j-- > 0)
-	{
-		free(ptr[j]);
-	}
-	free(ptr);
-}
-
-static char	**help_split(char const *s, char c, char **ptr)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (*s)
-	{
-		while (*s == c)
-			s++;
-		i = count_char((char *)s, c);
-		if (i != 0)
-		{
-			ptr[j] = ft_substr(s, 0, i);
-			if (!ptr[j])
+			p_strs = extract_sub(p_strs, &str, sep);
+			if (!*p_strs)
 			{
-				free_it(ptr, j);
-				return (NULL);
+				while (p_strs > strs)
+					free(*(--p_strs));
+				return (free(strs), NULL);
 			}
-			j++;
+			++p_strs;
+			continue ;
 		}
-		s += i;
+		++str;
 	}
-	return (ptr);
+	*p_strs = NULL;
+	return (strs);
 }
 
-char	**ft_split(char const *s, char c)
+static size_t	count_subs(const char *str, char sep)
 {
-	char			**str;
-	unsigned int	num;
+	size_t	subs_cnt;
+	int		sep_occ;
 
-	if (!s)
+	subs_cnt = 0;
+	sep_occ = -1;
+	while (*str)
+	{
+		if (*str == sep)
+			sep_occ = 1;
+		else if (sep_occ)
+		{
+			sep_occ = 0;
+			++subs_cnt;
+		}
+		++str;
+	}
+	return (subs_cnt);
+}
+
+static char	**extract_sub(char **strs, const char **str, char sep)
+{
+	const char	*p_str = *str;
+	char		*sub;
+
+	while (*p_str != sep && *p_str)
+		++p_str;
+	*strs = (char *)malloc((p_str - *str + 1) * sizeof(char));
+	if (!*strs)
 		return (NULL);
-	num = numofstr(s, c);
-	str = (char **)malloc(sizeof(char *) * (num + 1));
-	if (!str)
-		return (NULL);
-	str[num] = 0;
-	str = help_split((char *)s, c, str);
-	return (str);
+	sub = *strs;
+	while (*str < p_str)
+		*sub++ = *(*str)++;
+	*sub = '\0';
+	return (strs);
 }

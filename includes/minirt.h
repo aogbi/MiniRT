@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:52:26 by aogbi             #+#    #+#             */
-/*   Updated: 2024/12/16 18:40:45 by aogbi            ###   ########.fr       */
+/*   Updated: 2024/12/19 17:16:52 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,9 @@ typedef struct s_cylinder
 
 typedef struct s_scenes
 {
-	t_ambient_lightning	ambient;
-	t_camera			camera;
-	t_light				light;
+	t_ambient_lightning	*ambient;
+	t_camera			*camera;
+	t_light				*light;
 	t_sphere			*sphere;
 	t_plane				*plane;
 	t_cylinder			*cylinder;

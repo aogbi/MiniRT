@@ -1,27 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcpy.c                                        :+:      :+:    :+:   */
+/*   ft_strpbrk.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: yhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/11 16:29:04 by aogbi             #+#    #+#             */
-/*   Updated: 2023/11/18 13:26:33 by aogbi            ###   ########.fr       */
+/*   Created: 2024/08/21 22:10:38 by yhadhadi          #+#    #+#             */
+/*   Updated: 2024/08/21 22:10:53 by yhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strcpy(char *dest, const char *src)
+char	*ft_strpbrk(const char *str, const char *accept)
 {
-	int	i;
+	const char	*p_str = str;
 
-	i = 0;
-	while (src[i])
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
+	while (*p_str && !ft_strchr(accept, *p_str))
+		++p_str;
+	if (!*p_str)
+		return (NULL);
+	return ((char *)p_str);
 }

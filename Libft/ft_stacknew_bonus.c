@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
+/*   ft_stacknew_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: yhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/13 17:49:41 by aogbi             #+#    #+#             */
-/*   Updated: 2023/11/15 21:32:36 by aogbi            ###   ########.fr       */
+/*   Created: 2024/07/10 16:27:09 by yhadhadi          #+#    #+#             */
+/*   Updated: 2024/07/28 04:20:17 by yhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_list	*ft_lstnew(void *content)
+t_stack	*ft_stacknew(size_t cap)
 {
-	t_list	*head;
+	t_stack	*stack;
 
-	head = (t_list *)malloc(sizeof(t_list));
-	if (!head)
+	stack = (t_stack *)malloc(sizeof(t_stack));
+	if (!stack)
 		return (NULL);
-	head -> next = NULL;
-	head -> content = content;
-	return (head);
+	*stack = (t_stack){.cntnr = (void **)ft_calloc(cap, sizeof(void *)),
+		.cap = cap, .top = cap - 1};
+	if (!cap || !stack->cntnr)
+		return (free(stack), NULL);
+	return (stack);
 }

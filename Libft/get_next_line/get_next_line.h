@@ -3,34 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: yhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/12/10 16:55:23 by aogbi             #+#    #+#             */
-/*   Updated: 2024/04/08 18:44:40 by aogbi            ###   ########.fr       */
+/*   Created: 2024/02/26 08:29:07 by yhadhadi          #+#    #+#             */
+/*   Updated: 2024/05/26 19:53:30 by yhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# include <fcntl.h>
-# include <limits.h>
-# include <stdio.h>
-# include <stdlib.h>
-# include <strings.h>
-# include <unistd.h>
-# include "../Libft/libft.h"
+# include "libft.h"
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10
+#  define BUFFER_SIZE BUFSIZ
 # endif
 
-char	*get_next_line(int fd);
-size_t	ft_strlen_get(const char *s);
-size_t	ft_strlcat_get(char *dst, const char *src, size_t size);
-char	*ft_strdup_get(char *s);
-char	*ft_strchr(const char *s, int c);
-void	free_memory(char **ptr);
-void	ft_strjoin_get(char **s1, char *s2);
+typedef unsigned char	t_byte;
+
+typedef struct s_data_blk
+{
+	struct s_data_blk	*next;
+	char				*data;
+	size_t				len;
+	size_t				off;
+}	t_data_blk;
+
+typedef struct s_data_strm
+{
+	t_data_blk	*root_blk;
+	t_data_blk	*eol_blk;
+	t_data_blk	*recent_blk;
+	size_t		len;
+}	t_data_strm;
+
+void		clear_data_strm(t_data_strm *strm)
+			__attribute__((nonnull(1)));
 
 #endif

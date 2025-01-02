@@ -1,22 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstlast.c                                       :+:      :+:    :+:   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: yhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/16 17:28:41 by aogbi             #+#    #+#             */
-/*   Updated: 2024/04/11 05:40:55 by aogbi            ###   ########.fr       */
+/*   Created: 2023/12/27 19:42:36 by yhadhadi          #+#    #+#             */
+/*   Updated: 2024/07/02 15:22:24 by yhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-t_list	*ft_lstlast(t_list *lst)
+int	ft_printf(const char *fmt, ...)
 {
-	if (!lst)
-		return (NULL);
-	while (lst -> next)
-		lst = lst -> next;
-	return (lst);
+	va_list	vargs;
+	ssize_t	yld;
+
+	va_start(vargs, fmt);
+	yld = ft_vprintf_fd(fmt, &vargs, STDOUT_FILENO);
+	va_end(vargs);
+	return (yld);
 }

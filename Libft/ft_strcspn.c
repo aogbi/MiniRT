@@ -1,25 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back.c                                   :+:      :+:    :+:   */
+/*   ft_strcspn.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: yhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/16 23:00:39 by aogbi             #+#    #+#             */
-/*   Updated: 2023/11/21 22:03:46 by aogbi            ###   ########.fr       */
+/*   Created: 2024/08/21 22:07:49 by yhadhadi          #+#    #+#             */
+/*   Updated: 2024/08/22 04:45:12 by yhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
+size_t	ft_strcspn(const char *str, const char *reject)
 {
-	if (!lst || !new)
-		return ;
-	if (!*lst)
-	{
-		*lst = new;
-		return ;
-	}
-	ft_lstlast(*lst)->next = new;
+	const char	*p_str = str;
+
+	while (*p_str && !ft_strchr(reject, *p_str))
+		++p_str;
+	return (p_str - str);
 }

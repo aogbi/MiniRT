@@ -3,25 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: yhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/02 23:17:31 by aogbi             #+#    #+#             */
-/*   Updated: 2023/11/21 21:31:16 by aogbi            ###   ########.fr       */
+/*   Created: 2023/12/02 06:05:54 by yhadhadi          #+#    #+#             */
+/*   Updated: 2024/07/28 12:53:08 by yhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memcpy(void *dest, const void *src, size_t n)
+void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
-	unsigned char	*s;
-	unsigned char	*d;
+	const t_byte	*p_src;
+	t_byte			*p_dst;
+	const uintptr_t	*wp_src;
+	uintptr_t		*wp_dst;
 
-	if (dest == NULL && src == NULL)
-		return (NULL);
-	d = (unsigned char *)dest;
-	s = (unsigned char *)src;
-	while (n-- > 0)
-		*d++ = *s++;
-	return (dest);
+	if (dst == src)
+		return (dst);
+	wp_src = src;
+	wp_dst = dst;
+	if (!((uintptr_t)wp_src % alignof(uintptr_t))
+		&& !((uintptr_t)wp_dst % alignof(uintptr_t)))
+	{
+		while (n >= sizeof(uintptr_t))
+		{
+			*wp_dst++ = *wp_src++;
+			n -= sizeof(uintptr_t);
+		}
+	}
+	p_src = (const t_byte *)wp_src;
+	p_dst = (t_byte *)wp_dst;
+	while (n--)
+		*p_dst++ = *p_src++;
+	return (dst);
 }

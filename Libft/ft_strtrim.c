@@ -3,42 +3,34 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: yhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/05 23:49:34 by aogbi             #+#    #+#             */
-/*   Updated: 2023/11/26 13:03:26 by aogbi            ###   ########.fr       */
+/*   Created: 2023/11/26 13:17:35 by yhadhadi          #+#    #+#             */
+/*   Updated: 2023/12/08 15:36:57 by yhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static unsigned int	isset(char c, char const *set)
+char	*ft_strtrim(const char *str, const char *set)
 {
-	while (*set)
-	{
-		if (*set == c)
-			return (1);
-		set++;
-	}
-	return (0);
-}
+	const char	*p_str;
+	char		*seg;
+	char		*p_seg;
 
-char	*ft_strtrim(char const *s1, char const *set)
-{
-	char			*str;
-	unsigned int	index;
-
-	if (!s1 || !set)
+	while (ft_strchr(set, *str) && *str)
+		++str;
+	p_str = str;
+	while (*p_str)
+		++p_str;
+	while (ft_strchr(set, *p_str) && p_str >= str)
+		--p_str;
+	seg = (char *)malloc(((p_str + 1) - str + 1) * sizeof(char));
+	if (!seg)
 		return (NULL);
-	while (*s1 && isset(*s1, set))
-		++s1;
-	index = ft_strlen((char *)s1);
-	while (index && isset(s1[index - 1], set))
-		--index;
-	str = malloc((index + 1) * sizeof(char));
-	if (!str)
-		return (NULL);
-	ft_memcpy(str, s1, index + 1);
-	str[index] = 0;
-	return (str);
+	p_seg = seg;
+	while (str <= p_str)
+		*p_seg++ = *str++;
+	*p_seg = '\0';
+	return (seg);
 }

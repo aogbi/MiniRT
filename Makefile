@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+         #
+#    By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/17 18:19:59 by rpinto-r          #+#    #+#              #
-#    Updated: 2024/10/26 09:56:45 by aogbi            ###   ########.fr        #
+#    Updated: 2025/01/02 01:30:45 by aogbi            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,25 +25,24 @@ SCENE		     = ./scenes/mandatory.rt
 ### LIBRARIES ###
 LIBFT_FLAGS      = -lft
 LIBFT_DIR        = Libft
-ifeq ($(shell uname), Linux)
-	LIBMLX_DIR   = ./libmlx/linux
-	LIBMLX_INC   = ./libmlx/linux
-	LIBMLX_FLAGS = -lmlx -lXext -lX11 -lm -lz
-else
-	LIBMLX_DIR   = ./libmlx/macos
-	LIBMLX_INC   = ./libmlx/macos
-	LIBMLX_FLAGS = -lmlx -framework openGL -framework AppKit
-endif
+# ifeq ($(shell uname), Linux)
+LIBMLX_DIR   = ./libmlx/linux
+LIBMLX_FLAGS = -lmlx -lXext -lX11 -lm -lz
+# else
+# 	LIBMLX_DIR   = ./libmlx/macos
+# 	LIBMLX_FLAGS = -lmlx -framework openGL -framework AppKit
+# endif
 
 
 ### RULES ###
 all: $(NAME)
 
 .c.o:
-	$(CC) -I $(SRCS_INC) -I $(LIBMLX_INC) $(CFLAGS) -c $< -o $@
+	$(CC) -I $(SRCS_INC) -I $(LIBMLX_DIR) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJS)
 	$(MAKE) -C $(LIBFT_DIR)
+	$(MAKE) -C $(LIBFT_DIR) addons
 	$(MAKE) -C $(LIBMLX_DIR)
 	$(CC) -g3 $(OBJS) $(CFLAGS) $(LIBFT_FLAGS) $(LIBMLX_FLAGS) -L $(LIBFT_DIR) -L $(LIBMLX_DIR) -o $(NAME)
 

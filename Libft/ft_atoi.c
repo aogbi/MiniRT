@@ -3,51 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: yhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/02 18:19:32 by aogbi             #+#    #+#             */
-/*   Updated: 2024/06/04 02:17:51 by aogbi            ###   ########.fr       */
+/*   Created: 2023/11/28 21:09:21 by yhadhadi          #+#    #+#             */
+/*   Updated: 2024/08/17 03:15:28 by yhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	is_spaces(const char *nptr)
+int	ft_atoi(const char *str)
 {
-	while (*nptr)
-	{
-		if (*nptr != ' ')
-			return (0);
-		nptr++;
-	}
-	return (1);
-}
+	int		sgn;
+	int		dgt;
+	long	nbr;
 
-int	ft_atoi(const char *nptr)
-{
-	int		signal;
-	ssize_t	result;
-
-	signal = 1;
-	result = 0;
-	while (*nptr == ' ' || *nptr == '\t' || *nptr == '\n'
-		|| *nptr == '\r' || *nptr == '\v' || *nptr == '\f')
-		nptr++;
-	if (*nptr == '-' || *nptr == '+')
+	while (ft_isspace(*str))
+		++str;
+	sgn = 1;
+	if (*str == '-' || *str == '+')
 	{
-		if (*nptr == '-')
-			signal = -1;
-		nptr++;
+		if (*str++ == '-')
+			sgn *= -1;
 	}
-	while (ft_isdigit(*nptr))
+	nbr = 0;
+	while (*str >= '0' && *str <= '9')
 	{
-		result *= 10;
-		result += (*nptr++) - '0';
+		dgt = *str++ - 48;
+		if (nbr > (LONG_MAX - dgt) / 10)
+			return (LONG_MAX * (sgn > 0));
+		nbr = nbr * 10 + dgt;
 	}
-	if (!is_spaces(nptr) || *(nptr - 1) == '-' || *(nptr - 1) == '+')
-		return (-1);
-	result *= signal;
-	if ((ssize_t)result > INT_MAX || (ssize_t)result < INT_MIN)
-		return (-1);
-	return ((int)result);
+	return (nbr * sgn);
 }

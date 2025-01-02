@@ -3,25 +3,30 @@
 /*                                                        :::      ::::::::   */
 /*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: yhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/06 18:25:05 by aogbi             #+#    #+#             */
-/*   Updated: 2023/11/26 13:03:26 by aogbi            ###   ########.fr       */
+/*   Created: 2023/11/27 10:44:40 by yhadhadi          #+#    #+#             */
+/*   Updated: 2024/07/02 15:22:58 by yhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_striteri(char *s, void (*f)(unsigned int, char*))
+void	ft_striteri(char *str, int (*apply)(size_t *, char **, void *),
+	void *yld)
 {
-	int	i;
+	size_t	i;
+	int		ctrl;
 
-	if (!f)
-		return ;
 	i = 0;
-	while (s[i])
+	while (*str)
 	{
-		f(i, (s + i));
-		i++;
+		ctrl = apply(&i, &str, yld);
+		if (ctrl == FLOW_CONTINUE)
+			continue ;
+		else if (!ctrl)
+			break ;
+		++i;
+		++str;
 	}
 }

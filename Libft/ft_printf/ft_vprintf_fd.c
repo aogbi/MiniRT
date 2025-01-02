@@ -1,28 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstclear.c                                      :+:      :+:    :+:   */
+/*   ft_vprintf_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: yhadhadi <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/17 01:13:40 by aogbi             #+#    #+#             */
-/*   Updated: 2024/05/02 08:38:38 by aogbi            ###   ########.fr       */
+/*   Created: 2023/12/27 19:42:32 by yhadhadi          #+#    #+#             */
+/*   Updated: 2024/07/02 14:47:47 by yhadhadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_lstclear(t_list **lst, void (*del)(void*))
+int	ft_vprintf_fd(const char *fmt, va_list *vargs, int fd)
 {
-	t_list	*head;
+	ssize_t	yld;
+	char	*out;
 
-	if (!lst || !del)
-		return ;
-	while (*lst)
-	{
-		head = *lst;
-		del(head->content);
-		*lst = head->next;
-		free(head);
-	}
+	out = NULL;
+	yld = ft_vasprintf(&out, fmt, vargs);
+	if (yld == -1)
+		return (-1);
+	yld = write(fd, out, yld);
+	free(out);
+	return (yld);
 }
