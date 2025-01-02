@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:52:26 by aogbi             #+#    #+#             */
-/*   Updated: 2024/12/19 17:16:52 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/01/02 01:46:34 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ typedef struct s_light
 {
 	t_vector3			position;
 	int					brightness_ratio;
+	int					rgb;
 }						t_light;
 
 typedef struct t_camera
