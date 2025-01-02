@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:34:54 by aogbi             #+#    #+#             */
-/*   Updated: 2025/01/02 06:55:19 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/01/02 08:32:33 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int count_str_array(char **array)
 	i = 0;
 	if (!array)
 		return (0);
-	while (array[i])
+	while (array[i] && array[i][0] != '\n')
 		i++;
 	return (i);
 }
@@ -231,8 +231,8 @@ int init_plane(char **array, t_scenes *scenes)
 	plane->direction = coordinates(ft_split(array[2], ','), &flag);
 	plane->rgb = colors_range(array[3]);
 	plane->next = NULL;
-	if (!flag || plane->direction.x < 0.0 || plane->direction.x > 1.0 || plane->direction.y < 0.0 
-			|| plane->direction.y > 1.0 || plane->direction.z < 0.0 || plane->direction.z > 1.0 || plane->rgb == -1)
+	if (!flag || plane->direction.x < -1.0 || plane->direction.x > 1.0 || plane->direction.y < -1.0 
+			|| plane->direction.y > 1.0 || plane->direction.z < -1.0 || plane->direction.z > 1.0 || plane->rgb == -1)
 		return (ft_str_array_free(array), free(plane), 0);
 	else if (!scenes->plane)
 		scenes->plane = plane;
@@ -360,7 +360,7 @@ t_scenes *scene_description(char *file_name)
 	while (line)
 	{
 		if (line[0] != '\n' && !description_line(scenes, line))
-			return (free_scenes(scenes), free(line), NULL);
+			return (free_scenes(scenes), free(line), close(fd), NULL);
 		free(line);
 		line = get_next_line(fd);
 	}
