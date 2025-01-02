@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:52:26 by aogbi             #+#    #+#             */
-/*   Updated: 2025/01/02 03:05:30 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/01/02 04:10:24 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,14 @@ typedef struct s_vector3
 
 typedef struct s_ambient_lightning
 {
-	int					ratio;
+	double					ratio;
 	int					rgb;
 }						t_ambient_lightning;
 
 typedef struct s_light
 {
 	t_vector3			position;
-	int					brightness_ratio;
+	double				brightness_ratio;
 	int					rgb;
 }						t_light;
 

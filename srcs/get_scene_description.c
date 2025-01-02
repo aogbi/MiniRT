@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:34:54 by aogbi             #+#    #+#             */
-/*   Updated: 2025/01/02 04:00:03 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/01/02 04:10:53 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ int init_ambient(char **array, t_scenes *scenes)
 	else if (!ft_isfloat(array[1]))
 		return (free(ambient), ft_str_array_free(array), 0);
 	ambient->ratio = ft_atod(array[1]);
-	if (ambient->ratio < 0 || ambient->ratio > 1)
+	if (ambient->ratio < 0.0 || ambient->ratio > 1.0)
 		return (free(ambient), 0);
 	ambient->rgb = colors_range(array[2]);
 	if (ambient->rgb == -1)
@@ -179,7 +179,7 @@ int init_light(char **array, t_scenes *scenes)
 	light->position = coordinates(ft_split(array[1], ','), &flag);
 	light->brightness_ratio = ft_atod(array[2]);
 	light->rgb = colors_range(array[3]);
-	if (!flag || !ft_isfloat(array[2]) || light->brightness_ratio < 0 || light->brightness_ratio > 1 || light->rgb == -1)
+	if (!flag || !ft_isfloat(array[2]) || light->brightness_ratio < 0.00 || light->brightness_ratio > 1.00 || light->rgb == -1)
 		return (ft_str_array_free(array), free(light), 0);
 	scenes->light = light;
 	ft_str_array_free(array);
@@ -227,8 +227,8 @@ int init_plane(char **array, t_scenes *scenes)
 	plane->position = coordinates(ft_split(array[1], ','), &flag);
 	plane->direction = coordinates(ft_split(array[2], ','), &flag);
 	plane->rgb = colors_range(array[3]);
-	if (!flag || plane->direction.x < 0 || plane->direction.x > 1 || plane->direction.y < 0 
-			|| plane->direction.y > 1 || plane->direction.z < 0 || plane->direction.z > 1 || plane->rgb == -1)
+	if (!flag || plane->direction.x < 0.0 || plane->direction.x > 1.0 || plane->direction.y < 0.0 
+			|| plane->direction.y > 1.0 || plane->direction.z < 0.0 || plane->direction.z > 1.0 || plane->rgb == -1)
 		return (ft_str_array_free(array), free(plane), 0);
 	else if (!scenes->plane)
 		scenes->plane = plane;
@@ -257,8 +257,8 @@ int init_cylinder(char **array, t_scenes *scenes)
 	cylinder->diameter = ft_atod(array[3]);
 	cylinder->height = ft_atod(array[4]);
 	cylinder->rgb = colors_range(array[5]);
-	if (! flag || !ft_isfloat(array[3]) || cylinder->diameter <= 0 || cylinder->axis.x < 0 || cylinder->axis.x > 1 
-		|| cylinder->axis.y < 0 || cylinder->axis.y > 1 || cylinder->axis.z < 0 || cylinder->axis.z > 1 ||
+	if (! flag || !ft_isfloat(array[3]) || cylinder->diameter <= 0 || cylinder->axis.x < 0.0 || cylinder->axis.x > 1.0 
+		|| cylinder->axis.y < 0.0 || cylinder->axis.y > 1.0 || cylinder->axis.z < 0.0 || cylinder->axis.z > 1.0 ||
 		!ft_isfloat(array[4]) || cylinder->height <= 0 || cylinder->rgb == -1)
 		return (ft_str_array_free(array), free(cylinder), 0);
 	if (!scenes->cylinder)
