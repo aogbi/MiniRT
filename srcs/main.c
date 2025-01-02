@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:52:14 by aogbi             #+#    #+#             */
-/*   Updated: 2025/01/02 02:55:33 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/01/02 06:58:22 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,10 @@ int	main(int argc, char **argv)
 	else if (!ft_strnstr(argv[1], ".rt", ft_strlen(argv[1])))
 		return (write(2, "file must be a .rt file\n", 24), 1);
 	scenes = scene_description(argv[1]);
-	if (!scenes)
+	if (!scenes || !scenes->camera || !scenes->ambient || !scenes->light)
 		return (write (2, "Error\n", 7), 1);
 	calculate_ray_directions(scenes);
+	free_scenes(scenes);
 	// data.mlx_ptr = mlx_init();
 	// data.win_ptr = mlx_new_window(data.mlx_ptr, WIDTH, HEIGHT, "MiniRT");
 	// data.img.mlx_img = mlx_new_image(data.mlx_ptr, WIDTH, HEIGHT);

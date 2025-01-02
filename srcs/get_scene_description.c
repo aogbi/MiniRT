@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_scene_description.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:34:54 by aogbi             #+#    #+#             */
-/*   Updated: 2025/01/02 04:10:53 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/01/02 06:55:19 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int ft_isnum(char *str)
 {
-	if (!str)
+	if (!str || (str[0] == '\n' && str[1] == '\0'))
 		return (0);
 	else if (*str == '-' || *str == '+')
 		str++;
@@ -31,7 +31,7 @@ int ft_isfloat(char *str)
 {
 	int	flag;
 
-	if (!str)
+	if (!str || (str[0] == '\n' && str[1] == '\0'))
 		return (0);
 	else if (*str == '-' || *str == '+')
 		str++;
@@ -79,7 +79,7 @@ t_vector3 coordinates(char **array, int *flag)
 	int			i;
 
 	i = 0;
-	while(i)
+	while(array[i])
 	{
 		if (!ft_isfloat(array[i]) || i > 2)
 		{
@@ -94,6 +94,8 @@ t_vector3 coordinates(char **array, int *flag)
 			vector.z = ft_atod(array[2]);
 		i++;
 	}
+	if (i != 3)
+		*flag = 0;
 	ft_str_array_free(array);
 	return (vector);
 }
@@ -200,6 +202,7 @@ int init_sphere(char **array, t_scenes *scenes)
 	sphere->center = coordinates(ft_split(array[1], ','), &flag);
 	sphere->radius = ft_atod(array[2]) / 2;
 	sphere->rgb = colors_range(array[3]);
+	sphere->next = NULL;
 	if (!flag || !ft_isfloat(array[2]) || sphere->radius <= 0 || sphere->rgb == -1)
 		return (ft_str_array_free(array), free(sphere), 0);
 	else if (!scenes->sphere)
@@ -227,6 +230,7 @@ int init_plane(char **array, t_scenes *scenes)
 	plane->position = coordinates(ft_split(array[1], ','), &flag);
 	plane->direction = coordinates(ft_split(array[2], ','), &flag);
 	plane->rgb = colors_range(array[3]);
+	plane->next = NULL;
 	if (!flag || plane->direction.x < 0.0 || plane->direction.x > 1.0 || plane->direction.y < 0.0 
 			|| plane->direction.y > 1.0 || plane->direction.z < 0.0 || plane->direction.z > 1.0 || plane->rgb == -1)
 		return (ft_str_array_free(array), free(plane), 0);
@@ -257,11 +261,12 @@ int init_cylinder(char **array, t_scenes *scenes)
 	cylinder->diameter = ft_atod(array[3]);
 	cylinder->height = ft_atod(array[4]);
 	cylinder->rgb = colors_range(array[5]);
+	cylinder->next = NULL;
 	if (! flag || !ft_isfloat(array[3]) || cylinder->diameter <= 0 || cylinder->axis.x < 0.0 || cylinder->axis.x > 1.0 
 		|| cylinder->axis.y < 0.0 || cylinder->axis.y > 1.0 || cylinder->axis.z < 0.0 || cylinder->axis.z > 1.0 ||
 		!ft_isfloat(array[4]) || cylinder->height <= 0 || cylinder->rgb == -1)
 		return (ft_str_array_free(array), free(cylinder), 0);
-	if (!scenes->cylinder)
+	else if (!scenes->cylinder)
 		scenes->cylinder = cylinder;
 	else
 	{
@@ -308,6 +313,10 @@ int init_scenes(t_scenes *scenes)
 
 void free_scenes(t_scenes *scenes)
 {
+	t_plane		*plane_tmp;
+	t_sphere	*sphere_tmp;
+	t_cylinder	*cylinder_tmp;
+
 	if (scenes->camera)
 		free(scenes->camera);
 	if (scenes->light)
@@ -316,18 +325,21 @@ void free_scenes(t_scenes *scenes)
 		free(scenes->ambient);
 	while(scenes->sphere)
 	{
-		free(scenes->sphere);
+		sphere_tmp = scenes->sphere;
 		scenes->sphere = scenes->sphere->next;
+		free(sphere_tmp);
 	}
 	while(scenes->cylinder)
 	{
-		free(scenes->cylinder);
+		cylinder_tmp = scenes->cylinder;
 		scenes->cylinder = scenes->cylinder->next;
+		free(cylinder_tmp);
 	}
 	while(scenes->plane)
 	{
-		free(scenes->plane);
+		plane_tmp = scenes->plane;
 		scenes->plane = scenes->plane->next;
+		free(plane_tmp);
 	}
 	free(scenes);
 }
@@ -348,7 +360,7 @@ t_scenes *scene_description(char *file_name)
 	while (line)
 	{
 		if (line[0] != '\n' && !description_line(scenes, line))
-			return (free_scenes(scenes), NULL);
+			return (free_scenes(scenes), free(line), NULL);
 		free(line);
 		line = get_next_line(fd);
 	}
