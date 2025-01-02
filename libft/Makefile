@@ -6,13 +6,13 @@
 #    By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/16 00:40:09 by yhadhadi          #+#    #+#              #
-#    Updated: 2025/01/02 01:20:05 by aogbi            ###   ########.fr        #
+#    Updated: 2025/01/02 03:18:31 by aogbi            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Toolchain and flags
 CC := cc
-CFLAGS := -Wall -Werror -Wextra -O3 -DNO_LIBFT_BONUS -DNO_LIBFT_ADDONS
+CFLAGS := -Wall -Werror -Wextra -O3 -DNO_LIBFT_BONUS -DNO_LIBFT_ADDONS -fPIC
 CFLAGS_BONUS := $(filter-out -DNO_LIBFT_BONUS,$(CFLAGS))
 AR := ar
 ARFLAGS := -M

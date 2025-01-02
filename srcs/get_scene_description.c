@@ -6,11 +6,11 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:34:54 by aogbi             #+#    #+#             */
-/*   Updated: 2025/01/02 02:33:03 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/01/02 04:00:03 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/minirt.h"
+#include "../includes/minirt.h"
 
 int ft_isnum(char *str)
 {
@@ -18,7 +18,7 @@ int ft_isnum(char *str)
 		return (0);
 	else if (*str == '-' || *str == '+')
 		str++;
-	while (*str)
+	while (*str && (*str != '\n' && *(str + 1) != '\0'))
 	{
 		if (!ft_isdigit(*str))
 			return (0);
@@ -36,7 +36,7 @@ int ft_isfloat(char *str)
 	else if (*str == '-' || *str == '+')
 		str++;
 	flag = 0;
-	while (*str)
+	while (*str && (*str != '\n' && *(str + 1) != '\0'))
 	{
 		if (!ft_isdigit(*str) && *str != '.')
 			return (0);
@@ -147,7 +147,7 @@ int init_camera(char **array, t_scenes *scenes)
 	t_camera	*camera;
 	int			flag;
 
-	if (scenes->ambient || count_str_array(array) != 4)
+	if (scenes->camera || count_str_array(array) != 4)
 		return (0);
 	else if (!ft_isnum(array[3]))
 		return (ft_str_array_free(array), 0);
@@ -170,7 +170,7 @@ int init_light(char **array, t_scenes *scenes)
 	t_light *light;
 	int flag;
 
-	if (scenes->ambient || count_str_array(array) != 4)
+	if (scenes->light || count_str_array(array) != 4)
 		return (0);
 	light = malloc(sizeof(t_light));
 	if (!light)
@@ -218,7 +218,7 @@ int init_plane(char **array, t_scenes *scenes)
 	t_plane *plane;
 	int flag;
 
-	if (count_str_array(array) != 3)
+	if (count_str_array(array) != 4)
 		return (0);
 	plane = malloc(sizeof(t_plane));
 	if (!plane)
@@ -246,7 +246,7 @@ int init_cylinder(char **array, t_scenes *scenes)
 	t_cylinder *cylinder;
 	int flag;
 
-	if (ft_split_count(array) != 6)
+	if (count_str_array(array) != 6)
 		return (0);
 	cylinder = malloc(sizeof(t_cylinder));
 	if (!cylinder)
@@ -347,7 +347,7 @@ t_scenes *scene_description(char *file_name)
 	line = get_next_line(fd);
 	while (line)
 	{
-		if (!description_line(scenes, line))
+		if (line[0] != '\n' && !description_line(scenes, line))
 			return (free_scenes(scenes), NULL);
 		free(line);
 		line = get_next_line(fd);

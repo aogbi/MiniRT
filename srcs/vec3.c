@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   vec3.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:58:38 by aogbi             #+#    #+#             */
-/*   Updated: 2024/12/12 10:17:06 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/01/02 02:55:33 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/minirt.h"
+#include "../includes/minirt.h"
 
 t_vector3	vector_create(double x, double y, double z)
 {

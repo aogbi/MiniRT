@@ -6,14 +6,14 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:52:26 by aogbi             #+#    #+#             */
-/*   Updated: 2025/01/02 02:28:40 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/01/02 03:05:30 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINIRT_H
 # define MINIRT_H
 
-# include "../Libft/libft.h"
+# include "../libft/libft.h"
 # include <X11/keysym.h>
 # include <math.h>
 # include <mlx.h>
@@ -115,5 +115,6 @@ t_vector3				vector_normalize(t_vector3 v);
 double					ray_sphere_intersect(t_ray ray, t_sphere sphere);
 double					calculate_lighting(t_vector3 point, t_vector3 normal);
 t_vector3				scale(t_vector3 v, float scalar);
+t_scenes				*scene_description(char *file_name);
 
 #endif

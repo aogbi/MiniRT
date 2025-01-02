@@ -6,7 +6,7 @@
 #    By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/17 18:19:59 by rpinto-r          #+#    #+#              #
-#    Updated: 2025/01/02 01:30:45 by aogbi            ###   ########.fr        #
+#    Updated: 2025/01/02 03:17:07 by aogbi            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,22 +16,18 @@ CFLAGS           = #-Werror -Wextra -Wall
 CDEBUG           = -g3 -fsanitize=address
 RM               = rm -rf
 NAME             = minirt
-SRCS_DIR         = ./srcs
 SRCS_INC         = ./includes
-SRCS             = $(wildcard *.c)
+SRCS             = ./srcs/get_scene_description.c\
+				   ./srcs/main.c\
+				   ./srcs/vec3.c
 OBJS             = $(SRCS:.c=.o)
 SCENE		     = ./scenes/mandatory.rt
 
 ### LIBRARIES ###
+LIBFT_DIR        = libft
 LIBFT_FLAGS      = -lft
-LIBFT_DIR        = Libft
-# ifeq ($(shell uname), Linux)
-LIBMLX_DIR   = ./libmlx/linux
+LIBMLX_DIR   = mlx
 LIBMLX_FLAGS = -lmlx -lXext -lX11 -lm -lz
-# else
-# 	LIBMLX_DIR   = ./libmlx/macos
-# 	LIBMLX_FLAGS = -lmlx -framework openGL -framework AppKit
-# endif
 
 
 ### RULES ###
@@ -41,10 +37,9 @@ all: $(NAME)
 	$(CC) -I $(SRCS_INC) -I $(LIBMLX_DIR) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJS)
-	$(MAKE) -C $(LIBFT_DIR)
-	$(MAKE) -C $(LIBFT_DIR) addons
 	$(MAKE) -C $(LIBMLX_DIR)
-	$(CC) -g3 $(OBJS) $(CFLAGS) $(LIBFT_FLAGS) $(LIBMLX_FLAGS) -L $(LIBFT_DIR) -L $(LIBMLX_DIR) -o $(NAME)
+	$(MAKE) -C $(LIBFT_DIR) addons
+	$(CC) -g3 $(OBJS) $(CFLAGS)  $(LIBMLX_FLAGS) $(LIBFT_FLAGS) -L $(LIBMLX_DIR) -L $(LIBFT_DIR) -o $(NAME) -no-pie
 
 clean:
 	$(MAKE) -C $(LIBFT_DIR) clean

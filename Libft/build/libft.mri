@@ -1,4 +1,0 @@
-CREATE libft.a
- ADDLIB build/libft.a
-SAVE
-END
