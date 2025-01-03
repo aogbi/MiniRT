@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   get_scene_description.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:34:54 by aogbi             #+#    #+#             */
-/*   Updated: 2025/01/02 08:32:33 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/01/03 10:56:55 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-int ft_isnum(char *str)
+int	ft_isnum(char *str)
 {
 	if (!str || (str[0] == '\n' && str[1] == '\0'))
 		return (0);
@@ -27,7 +27,7 @@ int ft_isnum(char *str)
 	return (1);
 }
 
-int ft_isfloat(char *str)
+int	ft_isfloat(char *str)
 {
 	int	flag;
 
@@ -51,7 +51,7 @@ int ft_isfloat(char *str)
 	return (1);
 }
 
-void ft_str_array_free(char **array)
+void	ft_str_array_free(char **array)
 {
 	int	i;
 
@@ -61,7 +61,7 @@ void ft_str_array_free(char **array)
 	free(array);
 }
 
-int count_str_array(char **array)
+int	count_str_array(char **array)
 {
 	int	i;
 
@@ -73,24 +73,24 @@ int count_str_array(char **array)
 	return (i);
 }
 
-t_vector3 coordinates(char **array, int *flag)
+t_vector3	coordinates(char **array, int *flag)
 {
 	t_vector3	vector;
 	int			i;
 
 	i = 0;
-	while(array[i])
+	while (array[i])
 	{
 		if (!ft_isfloat(array[i]) || i > 2)
 		{
 			*flag = 0;
-			break;
+			break ;
 		}
-		else if(i == 0)
+		else if (i == 0)
 			vector.x = ft_atod(array[0]);
-		else if(i == 1)
+		else if (i == 1)
 			vector.y = ft_atod(array[1]);
-		else if(i == 2)
+		else if (i == 2)
 			vector.z = ft_atod(array[2]);
 		i++;
 	}
@@ -100,18 +100,19 @@ t_vector3 coordinates(char **array, int *flag)
 	return (vector);
 }
 
-int colors_range(char *str)
+int	colors_range(char *str)
 {
 	char	**array;
 	int		i;
-	int 	color;
+	int		color;
 
 	array = ft_split(str, ',');
 	i = 0;
 	color = 0;
 	while (array[i])
 	{
-		if (!ft_isnum(array[i]) || ft_atoi(array[i]) < 0 || ft_atoi(array[i]) > 255)
+		if (!ft_isnum(array[i]) || ft_atoi(array[i]) < 0
+			|| ft_atoi(array[i]) > 255)
 			return (ft_str_array_free(array), -1);
 		color = (color << 8) | ft_atoi(array[i]);
 		i++;
@@ -122,7 +123,7 @@ int colors_range(char *str)
 	return (color);
 }
 
-int init_ambient(char **array, t_scenes *scenes)
+int	init_ambient(char **array, t_scenes *scenes)
 {
 	t_ambient_lightning	*ambient;
 
@@ -144,7 +145,7 @@ int init_ambient(char **array, t_scenes *scenes)
 	return (1);
 }
 
-int init_camera(char **array, t_scenes *scenes)
+int	init_camera(char **array, t_scenes *scenes)
 {
 	t_camera	*camera;
 	int			flag;
@@ -167,10 +168,10 @@ int init_camera(char **array, t_scenes *scenes)
 	return (1);
 }
 
-int init_light(char **array, t_scenes *scenes)
+int	init_light(char **array, t_scenes *scenes)
 {
-	t_light *light;
-	int flag;
+	t_light	*light;
+	int		flag;
 
 	if (scenes->light || count_str_array(array) != 4)
 		return (0);
@@ -181,17 +182,18 @@ int init_light(char **array, t_scenes *scenes)
 	light->position = coordinates(ft_split(array[1], ','), &flag);
 	light->brightness_ratio = ft_atod(array[2]);
 	light->rgb = colors_range(array[3]);
-	if (!flag || !ft_isfloat(array[2]) || light->brightness_ratio < 0.00 || light->brightness_ratio > 1.00 || light->rgb == -1)
+	if (!flag || !ft_isfloat(array[2]) || light->brightness_ratio < 0.00
+		|| light->brightness_ratio > 1.00 || light->rgb == -1)
 		return (ft_str_array_free(array), free(light), 0);
 	scenes->light = light;
 	ft_str_array_free(array);
 	return (1);
 }
 
-int init_sphere(char **array, t_scenes *scenes)
+int	init_sphere(char **array, t_scenes *scenes)
 {
-	t_sphere *sphere;
-	int flag;
+	t_sphere	*sphere;
+	int			flag;
 
 	if (count_str_array(array) != 4)
 		return (0);
@@ -203,7 +205,8 @@ int init_sphere(char **array, t_scenes *scenes)
 	sphere->radius = ft_atod(array[2]) / 2;
 	sphere->rgb = colors_range(array[3]);
 	sphere->next = NULL;
-	if (!flag || !ft_isfloat(array[2]) || sphere->radius <= 0 || sphere->rgb == -1)
+	if (!flag || !ft_isfloat(array[2]) || sphere->radius <= 0 || sphere->rgb ==
+		-1)
 		return (ft_str_array_free(array), free(sphere), 0);
 	else if (!scenes->sphere)
 		scenes->sphere = sphere;
@@ -216,10 +219,10 @@ int init_sphere(char **array, t_scenes *scenes)
 	return (1);
 }
 
-int init_plane(char **array, t_scenes *scenes)
+int	init_plane(char **array, t_scenes *scenes)
 {
-	t_plane *plane;
-	int flag;
+	t_plane	*plane;
+	int		flag;
 
 	if (count_str_array(array) != 4)
 		return (0);
@@ -231,8 +234,10 @@ int init_plane(char **array, t_scenes *scenes)
 	plane->direction = coordinates(ft_split(array[2], ','), &flag);
 	plane->rgb = colors_range(array[3]);
 	plane->next = NULL;
-	if (!flag || plane->direction.x < -1.0 || plane->direction.x > 1.0 || plane->direction.y < -1.0 
-			|| plane->direction.y > 1.0 || plane->direction.z < -1.0 || plane->direction.z > 1.0 || plane->rgb == -1)
+	if (!flag || plane->direction.x < -1.0 || plane->direction.x > 1.0
+		|| plane->direction.y < -1.0 || plane->direction.y > 1.0
+		|| plane->direction.z < -1.0 || plane->direction.z > 1.0
+		|| plane->rgb == -1)
 		return (ft_str_array_free(array), free(plane), 0);
 	else if (!scenes->plane)
 		scenes->plane = plane;
@@ -245,10 +250,10 @@ int init_plane(char **array, t_scenes *scenes)
 	return (1);
 }
 
-int init_cylinder(char **array, t_scenes *scenes)
+int	init_cylinder(char **array, t_scenes *scenes)
 {
-	t_cylinder *cylinder;
-	int flag;
+	t_cylinder	*cylinder;
+	int			flag;
 
 	if (count_str_array(array) != 6)
 		return (0);
@@ -262,9 +267,12 @@ int init_cylinder(char **array, t_scenes *scenes)
 	cylinder->height = ft_atod(array[4]);
 	cylinder->rgb = colors_range(array[5]);
 	cylinder->next = NULL;
-	if (! flag || !ft_isfloat(array[3]) || cylinder->diameter <= 0 || cylinder->axis.x < 0.0 || cylinder->axis.x > 1.0 
-		|| cylinder->axis.y < 0.0 || cylinder->axis.y > 1.0 || cylinder->axis.z < 0.0 || cylinder->axis.z > 1.0 ||
-		!ft_isfloat(array[4]) || cylinder->height <= 0 || cylinder->rgb == -1)
+	if (!flag || !ft_isfloat(array[3]) || cylinder->diameter <= 0
+		|| cylinder->axis.x < 0.0 || cylinder->axis.x > 1.0
+		|| cylinder->axis.y < 0.0 || cylinder->axis.y > 1.0
+		|| cylinder->axis.z < 0.0 || cylinder->axis.z > 1.0
+		|| !ft_isfloat(array[4]) || cylinder->height <= 0 || cylinder->rgb ==
+		-1)
 		return (ft_str_array_free(array), free(cylinder), 0);
 	else if (!scenes->cylinder)
 		scenes->cylinder = cylinder;
@@ -277,7 +285,7 @@ int init_cylinder(char **array, t_scenes *scenes)
 	return (1);
 }
 
-int description_line(t_scenes *scenes, char *line)
+int	description_line(t_scenes *scenes, char *line)
 {
 	char	**array;
 
@@ -300,7 +308,7 @@ int description_line(t_scenes *scenes, char *line)
 		return (ft_str_array_free(array), 0);
 }
 
-int init_scenes(t_scenes *scenes)
+int	init_scenes(t_scenes *scenes)
 {
 	scenes->camera = NULL;
 	scenes->light = NULL;
@@ -311,7 +319,7 @@ int init_scenes(t_scenes *scenes)
 	return (0);
 }
 
-void free_scenes(t_scenes *scenes)
+void	free_scenes(t_scenes *scenes)
 {
 	t_plane		*plane_tmp;
 	t_sphere	*sphere_tmp;
@@ -323,19 +331,19 @@ void free_scenes(t_scenes *scenes)
 		free(scenes->light);
 	if (scenes->ambient)
 		free(scenes->ambient);
-	while(scenes->sphere)
+	while (scenes->sphere)
 	{
 		sphere_tmp = scenes->sphere;
 		scenes->sphere = scenes->sphere->next;
 		free(sphere_tmp);
 	}
-	while(scenes->cylinder)
+	while (scenes->cylinder)
 	{
 		cylinder_tmp = scenes->cylinder;
 		scenes->cylinder = scenes->cylinder->next;
 		free(cylinder_tmp);
 	}
-	while(scenes->plane)
+	while (scenes->plane)
 	{
 		plane_tmp = scenes->plane;
 		scenes->plane = scenes->plane->next;
@@ -344,11 +352,11 @@ void free_scenes(t_scenes *scenes)
 	free(scenes);
 }
 
-t_scenes *scene_description(char *file_name)
+t_scenes	*scene_description(char *file_name)
 {
-	t_scenes *scenes;
-	char *line;
-	int fd;
+	t_scenes	*scenes;
+	char		*line;
+	int			fd;
 
 	fd = open(file_name, O_RDONLY);
 	if (fd < 0)

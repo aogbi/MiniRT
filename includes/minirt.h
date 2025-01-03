@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minirt.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:52:26 by aogbi             #+#    #+#             */
-/*   Updated: 2025/01/02 06:38:26 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/01/03 13:15:18 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@
 # include <stdio.h>
 # include <fcntl.h>
 
-# define WIDTH 900
-# define HEIGHT 600
+# define WIDTH 1200
 
 typedef struct s_img
 {
@@ -33,13 +32,6 @@ typedef struct s_img
 	int					width;
 	int					height;
 }						t_img;
-
-typedef struct s_data
-{
-	void				*mlx_ptr;
-	void				*win_ptr;
-	t_img				img;
-}						t_data;
 
 typedef struct s_vector3
 {
@@ -108,12 +100,36 @@ typedef struct s_ray
 	t_vector3			direction;
 }						t_ray;
 
+typedef struct s_info
+{
+    t_scenes	*scenes;
+    t_vector3	pixel00_loc;
+    t_vector3	pixel_delta_u;
+    t_vector3	pixel_delta_v;
+    t_vector3	viewport_upper_left;
+    double		aspect_ratio;
+    double		focal_length;
+    double		viewport_height;
+    double		viewport_width;
+    t_vector3	viewport_u;
+    t_vector3	viewport_v;
+}				t_info;
+
+typedef struct s_data
+{
+	void				*mlx_ptr;
+	void				*win_ptr;
+	t_img				img;
+	t_info				info;
+}						t_data;
+
 t_vector3				vector_create(double x, double y, double z);
 t_vector3				vector_subtract(t_vector3 v1, t_vector3 v2);
 double					vector_dot(t_vector3 v1, t_vector3 v2);
+t_vector3				vector_add(t_vector3 a, t_vector3 b);
 t_vector3				vector_normalize(t_vector3 v);
-double					ray_sphere_intersect(t_ray ray, t_sphere sphere);
-double					calculate_lighting(t_vector3 point, t_vector3 normal);
+int						ray_sphere_intersect(t_ray ray, t_sphere *sphere);
+// double					calculate_lighting(t_vector3 point, t_vector3 normal);
 t_vector3				scale(t_vector3 v, float scalar);
 t_scenes				*scene_description(char *file_name);
 void					free_scenes(t_scenes *scenes);
