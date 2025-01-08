@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:52:14 by aogbi             #+#    #+#             */
-/*   Updated: 2025/01/08 14:15:02 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/01/08 15:19:23 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	key_hook(int key, t_data *data)
 void	init_data(t_data *data)
 {
 	data->info.aspect_ratio = 16.0 / 9.0;
-	data->img.width = WIDTH;  /*variable*/
+	data->img.width = WIDTH; /*variable*/
 	data->img.height = (int)(data->img.width / data->info.aspect_ratio);
 	if (data->img.height < 1)
 		data->img.height = 1;
@@ -50,30 +50,35 @@ void	init_data(t_data *data)
 					data->info.pixel_delta_v), 0.5));
 }
 
-void put_color_to_pixel(t_data *data, int i, int j, int color)
+void	put_color_to_pixel(t_data *data, int i, int j, int color)
 {
-	int *img_addr;
+	int	*img_addr;
 
-    img_addr = (int *)data->img.addr;
+	img_addr = (int *)data->img.addr;
 	img_addr[i + (j * (data->img.width))] = color;
 }
 
-int calculate_lighting(t_vector3 point, t_vector3 normal, t_data *data)
+int	calculate_lighting(t_vector3 point, t_vector3 normal, t_data *data)
 {
-	t_vector3 light_direction = vector_normalize(vector_subtract(data->info.scenes->light->position, point));
-	double intensity = vector_dot(scale(light_direction, -1), normal);
-	if (intensity > 0)
-	{
-		// int color = data->info.scenes->sphere->rgb;
-		int r = ((data->info.scenes->sphere->rgb >> 16) & 0xFF) * ((data->info.scenes->light->rgb >> 16) & 0xFF);
-		int g = ((data->info.scenes->sphere->rgb >> 8) & 0xFF) * ((data->info.scenes->light->rgb >> 8) & 0xFF);
-		int b = (data->info.scenes->sphere->rgb & 0xFF) * (data->info.scenes->light->rgb & 0xFF);
-		r *= intensity * data->info.scenes->light->brightness_ratio;
-		g *= intensity * data->info.scenes->light->brightness_ratio;
-		b *= intensity * data->info.scenes->light->brightness_ratio;
-		return ((r << 16) | (g << 8) | b);
-	}
-	return (0);
+	int			r;
+	int			g;
+	int			b;
+	t_vector3	light_direction;
+	double		intensity;
+
+	light_direction = vector_normalize(vector_subtract(data->info.scenes->light->position,
+				point));
+	intensity = vector_dot(normal, scale(light_direction, -1));
+	r = (int)(((data->info.scenes->sphere->rgb >> 16) & 0xFF) * intensity
+			* data->info.scenes->light->brightness_ratio
+			* (((data->info.scenes->light->rgb >> 16) & 0xFF) / 255.0));
+	g = (int)(((data->info.scenes->sphere->rgb >> 8) & 0xFF) * intensity
+			* data->info.scenes->light->brightness_ratio
+			* (((data->info.scenes->light->rgb >> 8) & 0xFF) / 255.0));
+	b = (int)((data->info.scenes->sphere->rgb & 0xFF) * intensity
+			* data->info.scenes->light->brightness_ratio
+			* ((data->info.scenes->light->rgb & 0xFF) / 255.0));
+	return ((r << 16) | (g << 8) | b);
 }
 
 int	render(t_data *data)
@@ -83,12 +88,15 @@ int	render(t_data *data)
 	t_vector3	pixel_center;
 	t_vector3	ray_direction;
 	t_ray		ray;
+	t_vector3	intersect_point;
+	t_vector3	normal;
+	int			color;
 
 	j = 0;
 	while (j < data->img.height)
 	{
 		printf("\rScanlines remaining: %d%% ", (j * 100) / data->img.height);
-		i = 0;	
+		i = 0;
 		while (i < data->img.width)
 		{
 			pixel_center = vector_add(data->info.pixel00_loc,
@@ -99,11 +107,13 @@ int	render(t_data *data)
 			ray = (t_ray){data->info.scenes->camera->position, ray_direction};
 			// calculate the color of the pixel at (i, j) in the image
 			// put the color of the pixel at (i, j) in the image
-			t_vector3 intersect_point = ray_sphere_intersect(ray, data->info.scenes->sphere);
+			intersect_point = ray_sphere_intersect(ray,
+					data->info.scenes->sphere);
 			if (!vector3_equal(intersect_point, (t_vector3){0, 0, 0}))
 			{
-				t_vector3 normal = vector_normalize(vector_subtract(intersect_point, data->info.scenes->sphere->center));
-				int color = calculate_lighting(intersect_point, normal, data);
+				normal = vector_normalize(vector_subtract(intersect_point,
+							data->info.scenes->sphere->center));
+				color = calculate_lighting(intersect_point, normal, data);
 				put_color_to_pixel(data, i, j, color);
 			}
 			i++;
@@ -128,14 +138,15 @@ int	main(int argc, char **argv)
 		return (write(2, "Error\n", 7), 1);
 	init_data(&data);
 	data.mlx_ptr = mlx_init();
-	data.img.mlx_img = mlx_new_image(data.mlx_ptr, data.img.width, data.img.height);
+	data.img.mlx_img = mlx_new_image(data.mlx_ptr, data.img.width,
+			data.img.height);
 	data.img.addr = mlx_get_data_addr(data.img.mlx_img, &data.img.bpp,
 			&data.img.line_len, &data.img.endian);
 	render(&data);
-	data.win_ptr = mlx_new_window(data.mlx_ptr, data.img.width, data.img.height, "MiniRT");
+	data.win_ptr = mlx_new_window(data.mlx_ptr, data.img.width, data.img.height,
+			"MiniRT");
 	mlx_key_hook(data.win_ptr, key_hook, &data);
-	mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, data.img.mlx_img, 0,
-	0);
+	mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, data.img.mlx_img, 0, 0);
 	mlx_loop(data.mlx_ptr);
 	free_scenes(data.info.scenes);
 	mlx_destroy_display(data.mlx_ptr);
