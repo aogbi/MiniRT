@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:52:14 by aogbi             #+#    #+#             */
-/*   Updated: 2025/01/03 13:15:18 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/01/08 14:15:02 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,24 @@ void put_color_to_pixel(t_data *data, int i, int j, int color)
 	img_addr[i + (j * (data->img.width))] = color;
 }
 
+int calculate_lighting(t_vector3 point, t_vector3 normal, t_data *data)
+{
+	t_vector3 light_direction = vector_normalize(vector_subtract(data->info.scenes->light->position, point));
+	double intensity = vector_dot(scale(light_direction, -1), normal);
+	if (intensity > 0)
+	{
+		// int color = data->info.scenes->sphere->rgb;
+		int r = ((data->info.scenes->sphere->rgb >> 16) & 0xFF) * ((data->info.scenes->light->rgb >> 16) & 0xFF);
+		int g = ((data->info.scenes->sphere->rgb >> 8) & 0xFF) * ((data->info.scenes->light->rgb >> 8) & 0xFF);
+		int b = (data->info.scenes->sphere->rgb & 0xFF) * (data->info.scenes->light->rgb & 0xFF);
+		r *= intensity * data->info.scenes->light->brightness_ratio;
+		g *= intensity * data->info.scenes->light->brightness_ratio;
+		b *= intensity * data->info.scenes->light->brightness_ratio;
+		return ((r << 16) | (g << 8) | b);
+	}
+	return (0);
+}
+
 int	render(t_data *data)
 {
 	int			j;
@@ -70,7 +88,7 @@ int	render(t_data *data)
 	while (j < data->img.height)
 	{
 		printf("\rScanlines remaining: %d%% ", (j * 100) / data->img.height);
-		i = 0;
+		i = 0;	
 		while (i < data->img.width)
 		{
 			pixel_center = vector_add(data->info.pixel00_loc,
@@ -81,8 +99,13 @@ int	render(t_data *data)
 			ray = (t_ray){data->info.scenes->camera->position, ray_direction};
 			// calculate the color of the pixel at (i, j) in the image
 			// put the color of the pixel at (i, j) in the image
-			if (ray_sphere_intersect(ray, data->info.scenes->sphere))
-				put_color_to_pixel(data, i, j,data->info.scenes->sphere->rgb);
+			t_vector3 intersect_point = ray_sphere_intersect(ray, data->info.scenes->sphere);
+			if (!vector3_equal(intersect_point, (t_vector3){0, 0, 0}))
+			{
+				t_vector3 normal = vector_normalize(vector_subtract(intersect_point, data->info.scenes->sphere->center));
+				int color = calculate_lighting(intersect_point, normal, data);
+				put_color_to_pixel(data, i, j, color);
+			}
 			i++;
 		}
 		j++;

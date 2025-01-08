@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   vec3.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:58:38 by aogbi             #+#    #+#             */
-/*   Updated: 2025/01/03 13:15:18 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/01/08 11:58:26 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,11 @@ t_vector3	scale(t_vector3 v, float scalar)
 	return (vector_create(v.x * scalar, v.y * scalar, v.z * scalar));
 }
 
+bool vector3_equal(t_vector3 a, t_vector3 b)
+{
+    return (a.x == b.x && a.y == b.y && a.z == b.z);
+}
+
 // double	calculate_lighting(t_vector3 normal, t_data *data)
 // {
 // 	double		intensity;
@@ -58,26 +63,7 @@ t_vector3	scale(t_vector3 v, float scalar)
 // 	return (0);
 // }
 
-double calculate_lighting(t_vector3 normal, t_vector3 point, t_data *data)
-{
-    double intensity = 0.0;
-    t_vector3 light_dir;
-
-    // Vector from point to light source
-    light_dir = vector_subtract(data->info.scenes->light->position, point);
-    light_dir = vector_normalize(light_dir);
-
-    // Calculate the dot product of normal and light direction
-    intensity = vector_dot(normal, light_dir);
-
-    // Ensure intensity is non-negative
-    if (intensity > 0)
-        return intensity;
-
-    return 0.0;
-}
-
-int	ray_sphere_intersect(t_ray ray, t_sphere *sphere)
+t_vector3	ray_sphere_intersect(t_ray ray, t_sphere *sphere)
 {
 	t_vector3	oc;
 	double		a;
@@ -85,12 +71,19 @@ int	ray_sphere_intersect(t_ray ray, t_sphere *sphere)
 	double		c;
 	double		discriminant;
 
-	oc = vector_subtract(ray.origin, sphere->center);
+	oc = vector_subtract(sphere->center, ray.origin);
 	a = vector_dot(ray.direction, ray.direction);
 	b = 2.0 * vector_dot(oc, ray.direction);
 	c = vector_dot(oc, oc) - sphere->radius * sphere->radius;
 	discriminant = b * b - 4 * a * c;
 	if (discriminant >= 0.0)
-		return (1);
-    return 0;
+	{
+		float t0 = (-b - sqrt(discriminant)) / (2.0f * a);
+		float t1 = (-b + sqrt(discriminant)) / (2.0f * a);
+		if (t0 < t1)
+			return (vector_add(ray.origin, scale(ray.direction, t0)));
+		else
+			return (vector_add(ray.origin, scale(ray.direction, t1)));
+	}
+	return ((t_vector3){0});
 }
