@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_scene_description.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:34:54 by aogbi             #+#    #+#             */
-/*   Updated: 2025/01/03 10:56:55 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/01/10 14:12:57 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -356,7 +356,7 @@ t_scenes	*scene_description(char *file_name)
 {
 	t_scenes	*scenes;
 	char		*line;
-	int			fd;
+	int			fd;	
 
 	fd = open(file_name, O_RDONLY);
 	if (fd < 0)

@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:52:26 by aogbi             #+#    #+#             */
-/*   Updated: 2025/01/08 11:58:26 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/01/13 18:13:26 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 
 # include "../libft/libft.h"
 # include <X11/keysym.h>
+# include <fcntl.h>
 # include <math.h>
 # include <mlx.h>
 # include <stdio.h>
-# include <fcntl.h>
 
 # define WIDTH 1200
 
@@ -40,7 +40,7 @@ typedef struct s_vector3
 
 typedef struct s_ambient_lightning
 {
-	double					ratio;
+	double				ratio;
 	int					rgb;
 }						t_ambient_lightning;
 
@@ -102,18 +102,18 @@ typedef struct s_ray
 
 typedef struct s_info
 {
-    t_scenes	*scenes;
-    t_vector3	pixel00_loc;
-    t_vector3	pixel_delta_u;
-    t_vector3	pixel_delta_v;
-    t_vector3	viewport_upper_left;
-    double		aspect_ratio;
-    double		focal_length;
-    double		viewport_height;
-    double		viewport_width;
-    t_vector3	viewport_u;
-    t_vector3	viewport_v;
-}				t_info;
+	t_scenes			*scenes;
+	t_vector3			pixel00_loc;
+	t_vector3			pixel_delta_u;
+	t_vector3			pixel_delta_v;
+	t_vector3			viewport_upper_left;
+	double				aspect_ratio;
+	double				focal_length;
+	double				viewport_height;
+	double				viewport_width;
+	t_vector3			viewport_u;
+	t_vector3			viewport_v;
+}						t_info;
 
 typedef struct s_data
 {
@@ -128,10 +128,13 @@ t_vector3				vector_subtract(t_vector3 v1, t_vector3 v2);
 double					vector_dot(t_vector3 v1, t_vector3 v2);
 t_vector3				vector_add(t_vector3 a, t_vector3 b);
 t_vector3				vector_normalize(t_vector3 v);
-t_vector3				ray_sphere_intersect(t_ray ray, t_sphere *sphere);
-// double					calculate_lighting(t_vector3 point, t_vector3 normal);
+float				ray_sphere_intersect(t_ray ray, t_sphere *sphere);
+// double					calculate_lighting(t_vector3 point,
+// t_vector3 normal);
 t_vector3				scale(t_vector3 v, float scalar);
 t_scenes				*scene_description(char *file_name);
 void					free_scenes(t_scenes *scenes);
-bool vector3_equal(t_vector3 a, t_vector3 b);
+bool					vector3_equal(t_vector3 a, t_vector3 b);
+float				ray_plane_intersect(t_ray ray, t_plane plane);
+int		close_intersect(t_data *data, t_ray ray);
 #endif
