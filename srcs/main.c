@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:52:14 by aogbi             #+#    #+#             */
-/*   Updated: 2025/01/27 12:48:13 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/02/04 23:08:16 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void move_camera(t_data *data, t_vector3 vect)
 {
 	data->info.scenes->camera->position = vector_add(data->info.scenes->camera->position, vect);
-	data->info.viewport_upper_left = vector_subtract(vector_subtract(vector_subtract(data->info.scenes->camera->position,
+	data->info.viewport_upper_left = vector_subtract(vector_subtract(vector_add(data->info.scenes->camera->position,
 					data->info.scenes->camera->direction),
 				scale(data->info.viewport_u, 0.5)), scale(data->info.viewport_v,
 				0.5));
@@ -55,12 +55,12 @@ int	key_hook(int key, t_data *data)
 void	init_data(t_data *data)
 {
 	data->info.aspect_ratio = 16.0 / 9.0;
-	data->img.width = WIDTH; /*variable*/
+	data->img.width = WIDTH;
 	data->img.height = (int)(data->img.width / data->info.aspect_ratio);
 	if (data->img.height < 1)
 		data->img.height = 1;
-	data->info.focal_length = 1.0;
-	data->info.viewport_height = 2.0;
+	data->info.theta = data->info.scenes->camera->fov * M_PI / 180.0;
+	data->info.viewport_height = 2.0 * tan(data->info.theta/2);
 	data->info.viewport_width = data->info.viewport_height
 		* (double)data->img.width / data->img.height;
 	data->info.viewport_u = (t_vector3){data->info.viewport_width, 0, 0};
@@ -69,7 +69,7 @@ void	init_data(t_data *data)
 			/ data->img.width);
 	data->info.pixel_delta_v = scale(data->info.viewport_v, 1.0
 			/ data->img.height);
-	data->info.viewport_upper_left = vector_subtract(vector_subtract(vector_subtract(data->info.scenes->camera->position,
+	data->info.viewport_upper_left = vector_subtract(vector_subtract(vector_add(data->info.scenes->camera->position,
 					data->info.scenes->camera->direction),
 				scale(data->info.viewport_u, 0.5)), scale(data->info.viewport_v,
 				0.5));
