@@ -1,6 +1,0 @@
-CREATE libft.a
- ADDLIB build/libft.a
-  ADDLIB build/addons/get_next_line/libgnl.a
-  ADDLIB build/addons/ft_printf/libftprintf.a
-SAVE
-END

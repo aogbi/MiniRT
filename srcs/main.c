@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:52:14 by aogbi             #+#    #+#             */
-/*   Updated: 2025/02/04 23:08:16 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/02/06 16:22:26 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,34 @@ void move_camera(t_data *data, t_vector3 vect)
 	render(data);
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 0, 0);
 }
+
+// t_vector3 move_point_by_angle(t_vector3 direc, double alpha_degrees)
+// {
+// 	double theta = atan2(direc.z, direc.x);
+// 	double radius = sqrt(direc.x*direc.x + direc.z*direc.z);
+// 	double new_angle = theta + alpha_degrees;
+// 	return((t_vector3){radius * cos(new_angle), direc.y, radius * sin(new_angle)});
+// }
+
+// void move_vector(t_data *data, char dir)
+// {
+// 	t_vector3 direc;
+
+// 	direc = vector_add(data->info.scenes->camera->position, data->info.scenes->camera->direction);
+// 	if (dir == 'l')
+// 		direc = move_point_by_angle(direc, M_PI / 6);
+// 	else
+// 		direc = move_point_by_angle(direc, -M_PI / 6);
+// 	data->info.scenes->camera->direction = vector_subtract(direc, data->info.scenes->camera->position);
+// 	data->info.viewport_upper_left = vector_subtract(vector_subtract(direc,
+// 				scale(data->info.viewport_u, 0.5)), scale(data->info.viewport_v,
+// 				0.5));
+// 	data->info.pixel00_loc = vector_add(data->info.viewport_upper_left,
+// 			scale(vector_add(data->info.pixel_delta_u,
+// 					data->info.pixel_delta_v), 0.5));
+// 	render(data);
+// 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->img.mlx_img, 0, 0);
+// }
 
 int	key_hook(int key, t_data *data)
 {
@@ -49,6 +77,10 @@ int	key_hook(int key, t_data *data)
 		move_camera(data, (t_vector3){0, 0, 1});
 	else if (key == 65364)
 		move_camera(data, (t_vector3){0, 0, -1});
+	// else if (key == 65361)
+	// 	move_vector(data, 'r');
+	// else if (key == 65363)
+	// 	move_vector(data, 'l');
 }
 
 
