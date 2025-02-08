@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:34:54 by aogbi             #+#    #+#             */
-/*   Updated: 2025/01/10 14:12:57 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/02/08 15:51:36 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,14 +263,14 @@ int	init_cylinder(char **array, t_scenes *scenes)
 	flag = 1;
 	cylinder->center = coordinates(ft_split(array[1], ','), &flag);
 	cylinder->axis = coordinates(ft_split(array[2], ','), &flag);
-	cylinder->diameter = ft_atod(array[3]);
+	cylinder->radias = ft_atod(array[3]) / 2.0;
 	cylinder->height = ft_atod(array[4]);
 	cylinder->rgb = colors_range(array[5]);
 	cylinder->next = NULL;
-	if (!flag || !ft_isfloat(array[3]) || cylinder->diameter <= 0
-		|| cylinder->axis.x < 0.0 || cylinder->axis.x > 1.0
-		|| cylinder->axis.y < 0.0 || cylinder->axis.y > 1.0
-		|| cylinder->axis.z < 0.0 || cylinder->axis.z > 1.0
+	if (!flag || !ft_isfloat(array[3]) || cylinder->radias <= 0
+		|| cylinder->axis.x < -1.0 || cylinder->axis.x > 1.0
+		|| cylinder->axis.y < -1.0 || cylinder->axis.y > 1.0
+		|| cylinder->axis.z < -1.0 || cylinder->axis.z > 1.0
 		|| !ft_isfloat(array[4]) || cylinder->height <= 0 || cylinder->rgb ==
 		-1)
 		return (ft_str_array_free(array), free(cylinder), 0);
@@ -356,7 +356,7 @@ t_scenes	*scene_description(char *file_name)
 {
 	t_scenes	*scenes;
 	char		*line;
-	int			fd;	
+	int			fd;
 
 	fd = open(file_name, O_RDONLY);
 	if (fd < 0)
