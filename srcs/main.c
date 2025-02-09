@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:52:14 by aogbi             #+#    #+#             */
-/*   Updated: 2025/02/08 18:34:48 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/02/09 14:39:44 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,13 +86,25 @@ void	put_color_to_pixel(t_data *data, int i, int j, int color)
 	img_addr[i + (j * (data->img.width))] = color;
 }
 
+t_ray	ray_render(t_data *data, int i, int j)
+{
+	t_vector3	pixel_center;
+	t_vector3	ray_direction;
+	t_ray		ray;
+
+	pixel_center = vector_add(data->info.pixel00_loc,
+			vector_add(scale(data->info.pixel_delta_u, i),
+				scale(data->info.pixel_delta_v, j)));
+	ray_direction = vector_subtract(pixel_center,
+			data->info.scenes->camera->position);
+	ray = (t_ray){data->info.scenes->camera->position, ray_direction};
+	return (ray);
+}
+
 int	render(t_data *data)
 {
 	int			j;
 	int			i;
-	t_vector3	pixel_center;
-	t_vector3	ray_direction;
-	t_ray		ray;
 	t_vector3	normal;
 	int			color;
 
@@ -103,13 +115,7 @@ int	render(t_data *data)
 		i = 0;
 		while (i < data->img.width)
 		{
-			pixel_center = vector_add(data->info.pixel00_loc,
-					vector_add(scale(data->info.pixel_delta_u, i),
-						scale(data->info.pixel_delta_v, j)));
-			ray_direction = vector_subtract(pixel_center,
-					data->info.scenes->camera->position);
-			ray = (t_ray){data->info.scenes->camera->position, ray_direction};
-			put_color_to_pixel(data, i, j, close_intersect(data, ray));
+			put_color_to_pixel(data, i, j, close_intersect(data, ray_render(data, i, j)));
 			i++;
 		}
 		j++;

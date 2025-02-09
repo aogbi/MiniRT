@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:52:26 by aogbi             #+#    #+#             */
-/*   Updated: 2025/02/08 15:51:36 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/02/09 16:16:38 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,9 +100,18 @@ typedef struct s_ray
 	t_vector3			direction;
 }						t_ray;
 
+typedef struct s_save
+{
+	t_sphere			*sphere;
+	t_plane				*plane;
+	t_cylinder			*cylinder;
+}	t_save;
+
+
 typedef struct s_info
 {
 	t_scenes			*scenes;
+	t_save				save;
 	t_vector3			pixel00_loc;
 	t_vector3			pixel_delta_u;
 	t_vector3			pixel_delta_v;
@@ -129,13 +138,9 @@ double					vector_dot(t_vector3 v1, t_vector3 v2);
 t_vector3				vector_add(t_vector3 a, t_vector3 b);
 t_vector3				vector_normalize(t_vector3 v);
 float				ray_sphere_intersect(t_ray ray, t_sphere *sphere);
-// double					calculate_lighting(t_vector3 point,
-// t_vector3 normal);
 t_vector3				scale(t_vector3 v, float scalar);
 t_scenes				*scene_description(char *file_name);
 void					free_scenes(t_scenes *scenes);
 bool					vector3_equal(t_vector3 a, t_vector3 b);
-// float				ray_plane_intersect(t_ray ray, t_plane plane);
-float plane_while(t_ray ray, t_plane **plane);
 int		close_intersect(t_data *data, t_ray ray);
 #endif
