@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:52:14 by aogbi             #+#    #+#             */
-/*   Updated: 2025/02/09 14:39:44 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/02/10 19:01:37 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ int	key_hook(int key, t_data *data)
 		move_camera(data, (t_vector3){0, 0, 1});
 	else if (key == 65364)
 		move_camera(data, (t_vector3){0, 0, -1});
-}
+	return (1);
+}	
 
 void	init_data(t_data *data)
 {
@@ -62,7 +63,7 @@ void	init_data(t_data *data)
 	data->info.theta = data->info.scenes->camera->fov * M_PI / 180.0;
 	data->info.viewport_height = 2.0 * tan(data->info.theta / 2);
 	data->info.viewport_width = data->info.viewport_height
-		* (double)data->img.width / data->img.height;
+		* (float)data->img.width / data->img.height;	
 	data->info.viewport_u = (t_vector3){data->info.viewport_width, 0, 0};
 	data->info.viewport_v = (t_vector3){0, -data->info.viewport_height, 0};
 	data->info.pixel_delta_u = scale(data->info.viewport_u, 1.0
@@ -105,8 +106,6 @@ int	render(t_data *data)
 {
 	int			j;
 	int			i;
-	t_vector3	normal;
-	int			color;
 
 	j = 0;
 	while (j < data->img.height)

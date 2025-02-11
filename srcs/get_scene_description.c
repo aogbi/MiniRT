@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:34:54 by aogbi             #+#    #+#             */
-/*   Updated: 2025/02/08 15:51:36 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/02/10 19:17:18 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -202,10 +202,10 @@ int	init_sphere(char **array, t_scenes *scenes)
 		return (0);
 	flag = 1;
 	sphere->center = coordinates(ft_split(array[1], ','), &flag);
-	sphere->radius = ft_atod(array[2]) / 2;
+	sphere->radius = ft_atod(array[2]) / 2.0f;
 	sphere->rgb = colors_range(array[3]);
 	sphere->next = NULL;
-	if (!flag || !ft_isfloat(array[2]) || sphere->radius <= 0 || sphere->rgb ==
+	if (!flag || !ft_isfloat(array[2]) || sphere->radius <= 0.0f || sphere->rgb ==
 		-1)
 		return (ft_str_array_free(array), free(sphere), 0);
 	else if (!scenes->sphere)

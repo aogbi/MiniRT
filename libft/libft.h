@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+        */
+/*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 02:55:46 by yhadhadi          #+#    #+#             */
-/*   Updated: 2025/01/02 01:25:31 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/02/10 19:17:04 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,7 +181,7 @@ int		ft_stackrrot(t_stack *stack)
 		__attribute__((nonnull(1)));
 int		ft_stackswap(t_stack *stack)
 		__attribute__((nonnull(1)));
-double	ft_atod(char *str);
+float	ft_atod(char *str);
 
 # endif
 

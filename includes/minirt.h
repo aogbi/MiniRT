@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:52:26 by aogbi             #+#    #+#             */
-/*   Updated: 2025/02/09 16:16:38 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/02/10 19:00:49 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,19 +35,19 @@ typedef struct s_img
 
 typedef struct s_vector3
 {
-	double x, y, z;
+	float x, y, z;
 }						t_vector3;
 
 typedef struct s_ambient_lightning
 {
-	double				ratio;
+	float				ratio;
 	int					rgb;
 }						t_ambient_lightning;
 
 typedef struct s_light
 {
 	t_vector3			position;
-	double				brightness_ratio;
+	float				brightness_ratio;
 	int					rgb;
 }						t_light;
 
@@ -69,7 +69,7 @@ typedef struct s_plane
 typedef struct s_sphere
 {
 	t_vector3			center;
-	double				radius;
+	float				radius;
 	int					rgb;
 	struct s_sphere		*next;
 }						t_sphere;
@@ -78,8 +78,8 @@ typedef struct s_cylinder
 {
 	t_vector3			center;
 	t_vector3			axis;
-	double				radias;
-	double				height;
+	float				radias;
+	float				height;
 	int					rgb;
 	struct s_cylinder	*next;
 }						t_cylinder;
@@ -116,10 +116,10 @@ typedef struct s_info
 	t_vector3			pixel_delta_u;
 	t_vector3			pixel_delta_v;
 	t_vector3			viewport_upper_left;
-	double				aspect_ratio;
-	double				theta;
-	double				viewport_height;
-	double				viewport_width;
+	float				aspect_ratio;
+	float				theta;
+	float				viewport_height;
+	float				viewport_width;
 	t_vector3			viewport_u;
 	t_vector3			viewport_v;
 }						t_info;
@@ -132,15 +132,16 @@ typedef struct s_data
 	t_info				info;
 }						t_data;
 
-t_vector3				vector_create(double x, double y, double z);
+t_vector3				vector_create(float x, float y, float z);
 t_vector3				vector_subtract(t_vector3 v1, t_vector3 v2);
-double					vector_dot(t_vector3 v1, t_vector3 v2);
+float					vector_dot(t_vector3 v1, t_vector3 v2);
 t_vector3				vector_add(t_vector3 a, t_vector3 b);
 t_vector3				vector_normalize(t_vector3 v);
-float				ray_sphere_intersect(t_ray ray, t_sphere *sphere);
+float					ray_sphere_intersect(t_ray ray, t_sphere *sphere);
 t_vector3				scale(t_vector3 v, float scalar);
 t_scenes				*scene_description(char *file_name);
 void					free_scenes(t_scenes *scenes);
 bool					vector3_equal(t_vector3 a, t_vector3 b);
-int		close_intersect(t_data *data, t_ray ray);
+int						close_intersect(t_data *data, t_ray ray);
+int						render(t_data *data);
 #endif

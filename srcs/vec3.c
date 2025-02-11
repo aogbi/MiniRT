@@ -6,13 +6,13 @@
 /*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:58:38 by aogbi             #+#    #+#             */
-/*   Updated: 2025/02/09 16:25:12 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/02/10 19:03:21 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minirt.h"
 
-t_vector3	vector_create(double x, double y, double z)
+t_vector3	vector_create(float x, float y, float z)
 {
 	t_vector3	v;
 
@@ -30,7 +30,7 @@ t_vector3	vector_subtract(t_vector3 v1, t_vector3 v2)
 	return (vector_create(v1.x - v2.x, v1.y - v2.y, v1.z - v2.z));
 }
 
-double	vector_dot(t_vector3 v1, t_vector3 v2)
+float	vector_dot(t_vector3 v1, t_vector3 v2)
 {
 	return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
 }
@@ -47,7 +47,7 @@ t_vector3	vector_cross(t_vector3 a, t_vector3 b)
 
 t_vector3	vector_normalize(t_vector3 v)
 {
-	double	length;
+	float	length;
 
 	length = sqrt(vector_dot(v, v));
 	return (vector_create(v.x / length, v.y / length, v.z / length));
@@ -85,7 +85,7 @@ int	calculate_sphere_lighting(t_vector3 point, t_sphere *sphere, t_data *data)
 	int			g;
 	int			b;
 	t_vector3	light_direction;
-	double		intensity;
+	float		intensity;
 
 	light_direction = vector_normalize(vector_subtract(point,
 				data->info.scenes->light->position));
@@ -93,14 +93,14 @@ int	calculate_sphere_lighting(t_vector3 point, t_sphere *sphere, t_data *data)
 		* data->info.scenes->light->brightness_ratio;
 	intensity += data->info.scenes->ambient->ratio;
 	intensity = fmin(1.0, intensity);
-	r = (int)((double)((sphere->rgb >> 16) & 0xFF) * intensity);
-	g = (int)((double)((sphere->rgb >> 8) & 0xFF) * intensity);
-	b = (int)((double)((sphere->rgb) & 0xFF) * intensity);
-	r *= (int)((double)((((data->info.scenes->ambient->rgb >> 16) & 0xFF) / 255)
+	r = (int)((float)((sphere->rgb >> 16) & 0xFF) * intensity);
+	g = (int)((float)((sphere->rgb >> 8) & 0xFF) * intensity);
+	b = (int)((float)((sphere->rgb) & 0xFF) * intensity);
+	r *= (int)((float)((((data->info.scenes->ambient->rgb >> 16) & 0xFF) / 255)
 				* (((data->info.scenes->light->rgb >> 16) & 0xFF) / 255)));
-	g *= (int)((double)((((data->info.scenes->ambient->rgb >> 8) & 0xFF) / 255)
+	g *= (int)((float)((((data->info.scenes->ambient->rgb >> 8) & 0xFF) / 255)
 				* (((data->info.scenes->light->rgb >> 8) & 0xFF) / 255)));
-	b *= (int)((double)(((data->info.scenes->ambient->rgb & 0xFF) / 255)
+	b *= (int)((float)(((data->info.scenes->ambient->rgb & 0xFF) / 255)
 				* ((data->info.scenes->light->rgb & 0xFF) / 255)));
 	return ((r << 16) | (g << 8) | b);
 }
@@ -112,7 +112,7 @@ int	calculate_plane_lighting(t_vector3 point, t_plane *plane,
 	int			g;
 	int			b;
 	t_vector3	light_direction;
-	double		intensity;
+	float		intensity;
 
 	light_direction = vector_normalize(vector_subtract(data->info.scenes->light->position,
 				point));
@@ -120,14 +120,14 @@ int	calculate_plane_lighting(t_vector3 point, t_plane *plane,
 		* data->info.scenes->light->brightness_ratio;
 	intensity += data->info.scenes->ambient->ratio;
 	intensity = fmin(1.0, intensity);
-	r = (int)((double)((plane->rgb >> 16) & 0xFF) * intensity);
-	g = (int)((double)((plane->rgb >> 8) & 0xFF) * intensity);
-	b = (int)((double)((plane->rgb) & 0xFF) * intensity);
-	r *= (int)((double)((((data->info.scenes->ambient->rgb >> 16) & 0xFF) / 255)
+	r = (int)((float)((plane->rgb >> 16) & 0xFF) * intensity);
+	g = (int)((float)((plane->rgb >> 8) & 0xFF) * intensity);
+	b = (int)((float)((plane->rgb) & 0xFF) * intensity);
+	r *= (int)((float)((((data->info.scenes->ambient->rgb >> 16) & 0xFF) / 255)
 				* (((data->info.scenes->light->rgb >> 16) & 0xFF) / 255)));
-	g *= (int)((double)((((data->info.scenes->ambient->rgb >> 8) & 0xFF) / 255)
+	g *= (int)((float)((((data->info.scenes->ambient->rgb >> 8) & 0xFF) / 255)
 				* (((data->info.scenes->light->rgb >> 8) & 0xFF) / 255)));
-	b *= (int)((double)(((data->info.scenes->ambient->rgb & 0xFF) / 255)
+	b *= (int)((float)(((data->info.scenes->ambient->rgb & 0xFF) / 255)
 				* ((data->info.scenes->light->rgb & 0xFF) / 255)));
 	return ((r << 16) | (g << 8) | b);
 }
@@ -148,14 +148,14 @@ t_vector3	quadratic_equation(t_ray ray, t_cylinder *cyl)
 	return (equa);
 }
 
-double	intersect_cylinder(t_ray ray, t_cylinder *cyl)
+float	intersect_cylinder(t_ray ray, t_cylinder *cyl)
 {
 	t_vector3	equa;
-	double		delta;
-	double		t1;
-	double		t2;
-	double		h1;
-	double		h2;
+	float		delta;
+	float		t1;
+	float		t2;
+	float		h1;
+	float		h2;
 
 	equa = quadratic_equation(ray, cyl);
 	delta = equa.y * equa.y - 4 * equa.x * equa.z;
@@ -179,7 +179,7 @@ int	calculate_cylinder_lighting(t_vector3 point, t_cylinder *cyl, t_data *data)
 	t_vector3	proj;
 	t_vector3	normal;
 	t_vector3	light_dir;
-	double		intensity;
+	float		intensity;
 	int			r;
 	int			g;
 	int			b;
@@ -193,10 +193,10 @@ int	calculate_cylinder_lighting(t_vector3 point, t_cylinder *cyl, t_data *data)
 		* data->info.scenes->light->brightness_ratio;
 	intensity += data->info.scenes->ambient->ratio;
 	intensity = fmin(1.0, intensity);
-	r = fmin(255, fmax(0, (int)((double)((cyl->rgb >> 16) & 0xFF)
+	r = fmin(255, fmax(0, (int)((float)((cyl->rgb >> 16) & 0xFF)
 					* intensity)));
-	g = fmin(255, fmax(0, (int)((double)((cyl->rgb >> 8) & 0xFF) * intensity)));
-	b = fmin(255, fmax(0, (int)((double)(cyl->rgb & 0xFF) * intensity)));
+	g = fmin(255, fmax(0, (int)((float)((cyl->rgb >> 8) & 0xFF) * intensity)));
+	b = fmin(255, fmax(0, (int)((float)(cyl->rgb & 0xFF) * intensity)));
 	return ((r << 16) | (g << 8) | b);
 }
 
@@ -317,16 +317,14 @@ float	ray_sphere_intersect(t_ray ray, t_sphere *sphere)
 {
 	t_vector3 oc;
 	t_vector3 equa;
-	double discriminant;
-	float t0;
-	float t1;
+	float discriminant;
 	
 	oc = vector_subtract(ray.origin, sphere->center);
 	equa.x = vector_dot(ray.direction, ray.direction);
-	equa.y = 2.0 * vector_dot(oc, ray.direction);
+	equa.y = 2.0f * vector_dot(oc, ray.direction);
 	equa.z = vector_dot(oc, oc) - sphere->radius * sphere->radius;
-	discriminant = equa.y * equa.y - 4 * equa.x * equa.z;
-	if (discriminant >= 0.0)
+	discriminant = equa.y * equa.y - 4.0f * equa.x * equa.z;
+	if (discriminant >= 0.0f)
 		return ((-equa.y - sqrt(discriminant)) / (2.0f * equa.x));
 	return (0.0f);
 }
