@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:58:38 by aogbi             #+#    #+#             */
-/*   Updated: 2025/02/12 20:09:16 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/02/12 20:26:14 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ float	ray_plane_intersect(t_ray ray, t_plane plane)
 	return (0);
 }
 
-double vector_length(t_vector3 v)
+float vector_length(t_vector3 v)
 {
     return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
 }

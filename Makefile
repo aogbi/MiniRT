@@ -6,14 +6,12 @@
 #    By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/17 18:19:59 by rpinto-r          #+#    #+#              #
-#    Updated: 2025/02/11 19:00:59 by aogbi            ###   ########.fr        #
+#    Updated: 2025/02/12 20:27:52 by aogbi            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-### VARIABLES ###
-CC               = gcc
-CFLAGS           = #-Werror -Wextra -Wall
-CDEBUG           = -g3 -fsanitize=address
+CC               = cc
+CFLAGS           = -Werror -Wextra -Wall
 RM               = rm -rf
 NAME             = minirt
 SRCS_INC         = ./includes
@@ -23,14 +21,12 @@ SRCS             = ./srcs/get_scene_description.c\
 OBJS             = $(SRCS:.c=.o)
 SCENE		     = ./scenes/mandatory.rt
 
-### LIBRARIES ###
 LIBFT_DIR        = libft
 LIBFT_FLAGS      = -lft
 LIBMLX_DIR   = mlx
 LIBMLX_FLAGS = -lmlx -lXext -lX11 -lm -lz
 
 
-### RULES ###
 all: $(NAME)
 
 .c.o:
@@ -51,17 +47,3 @@ fclean: clean
 	$(RM) $(NAME)
 
 re: fclean all
-
-run:
-	./$(NAME) 
-	# $(SCENE)
-
-dev: CFLAGS += $(CDEBUG)
-dev: $(OBJS)
-	$(CC) $(OBJS) $(CFLAGS) $(LIBFT_FLAGS) $(LIBMLX_FLAGS) -L $(LIBFT_DIR) -L $(LIBMLX_DIR) -o $(NAME)
-	$(MAKE) run
-
-valgrind:
-	valgrind --leak-check=full ./$(NAME)
-
-.PHONY: all clean fclean re

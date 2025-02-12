@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:52:14 by aogbi             #+#    #+#             */
-/*   Updated: 2025/02/10 19:01:37 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/02/12 20:24:00 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,21 @@ void	move_camera(t_data *data, t_vector3 vect)
 		0);
 }
 
+int	x_button_in_window(t_data *data)
+{
+    mlx_destroy_window(data->mlx_ptr, data->win_ptr);
+    data->win_ptr = NULL;
+	mlx_destroy_image(data->mlx_ptr, data->img.mlx_img);
+	data->img.mlx_img = NULL;
+	mlx_loop_end(data->mlx_ptr);
+    return (0);
+}
+
+
 int	key_hook(int key, t_data *data)
 {
 	if (key == XK_Escape)
-	{
-		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
-		data->win_ptr = NULL;
-		mlx_destroy_image(data->mlx_ptr, data->img.mlx_img);
-		data->img.mlx_img = NULL;
-		mlx_loop_end(data->mlx_ptr);
-	}
+		x_button_in_window(data);
 	else if (key == 'd')
 		move_camera(data, (t_vector3){1, 0, 0});
 	else if (key == 'a')
@@ -145,6 +150,7 @@ int	main(int argc, char **argv)
 	data.win_ptr = mlx_new_window(data.mlx_ptr, data.img.width, data.img.height,
 			"MiniRT");
 	mlx_key_hook(data.win_ptr, key_hook, &data);
+	mlx_hook(data.win_ptr, ClientMessage, 0, &x_button_in_window, &data);
 	mlx_put_image_to_window(data.mlx_ptr, data.win_ptr, data.img.mlx_img, 0, 0);
 	mlx_loop(data.mlx_ptr);
 	free_scenes(data.info.scenes);

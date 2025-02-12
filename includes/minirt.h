@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:52:26 by aogbi             #+#    #+#             */
-/*   Updated: 2025/02/12 19:31:56 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/02/12 20:48:48 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,14 @@
 # define MINIRT_H
 
 # include "../libft/libft.h"
+# include <X11/X.h>
 # include <X11/keysym.h>
 # include <fcntl.h>
 # include <math.h>
 # include <mlx.h>
 # include <stdio.h>
 
-# define WIDTH 1024
+# define WIDTH 1924
 # define EPSILON 0.001F
 
 typedef struct s_img
