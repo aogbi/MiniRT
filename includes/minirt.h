@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:52:26 by aogbi             #+#    #+#             */
-/*   Updated: 2025/02/10 19:00:49 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/02/12 19:31:56 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <stdio.h>
 
 # define WIDTH 1024
+# define EPSILON 0.001F
 
 typedef struct s_img
 {
@@ -144,4 +145,7 @@ void					free_scenes(t_scenes *scenes);
 bool					vector3_equal(t_vector3 a, t_vector3 b);
 int						close_intersect(t_data *data, t_ray ray);
 int						render(t_data *data);
+float	spheres_while(t_ray ray, t_data *data);
+float	plane_while(t_ray ray, t_data *data);
+float	cyl_while(t_ray ray, t_data *data);
 #endif

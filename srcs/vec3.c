@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/25 13:58:38 by aogbi             #+#    #+#             */
-/*   Updated: 2025/02/10 19:03:21 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/02/12 20:09:16 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,29 @@ float	ray_plane_intersect(t_ray ray, t_plane plane)
 	return (0);
 }
 
+double vector_length(t_vector3 v)
+{
+    return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+}
+
+bool shadow(t_data *data, t_vector3 point, t_vector3 *light_direction)
+{
+	t_ray		ray;
+
+	float length = vector_length(*light_direction);
+	*light_direction = scale(*light_direction, 1.0f / length);
+	ray = (t_ray){point, *light_direction};
+	float sphere_d;
+	sphere_d = spheres_while(ray, data);
+	float plane_d = 0;
+	plane_d = plane_while(ray, data);
+	float cylander_d = 0;
+	cylander_d = cyl_while(ray, data);
+	if ((sphere_d > EPSILON && sphere_d < length) || (plane_d > EPSILON && plane_d < length) || (cylander_d > EPSILON && cylander_d < length))
+		return (0);
+	return (1);
+}
+
 int	calculate_sphere_lighting(t_vector3 point, t_sphere *sphere, t_data *data)
 {
 	int			r;
@@ -87,10 +110,11 @@ int	calculate_sphere_lighting(t_vector3 point, t_sphere *sphere, t_data *data)
 	t_vector3	light_direction;
 	float		intensity;
 
-	light_direction = vector_normalize(vector_subtract(point,
-				data->info.scenes->light->position));
-	intensity = fmax(0.0, -vector_dot(vector_normalize(vector_subtract(point, sphere->center)), light_direction))
-		* data->info.scenes->light->brightness_ratio;
+	light_direction = vector_subtract(data->info.scenes->light->position, point);
+	intensity = 0.0f;
+	if (shadow(data, point, &light_direction))
+		intensity = fmax(0.0, vector_dot(vector_normalize(vector_subtract(point, sphere->center)), light_direction))
+			* data->info.scenes->light->brightness_ratio;
 	intensity += data->info.scenes->ambient->ratio;
 	intensity = fmin(1.0, intensity);
 	r = (int)((float)((sphere->rgb >> 16) & 0xFF) * intensity);
@@ -114,10 +138,12 @@ int	calculate_plane_lighting(t_vector3 point, t_plane *plane,
 	t_vector3	light_direction;
 	float		intensity;
 
-	light_direction = vector_normalize(vector_subtract(data->info.scenes->light->position,
-				point));
-	intensity = fmax(0.0, vector_dot(plane->direction, light_direction))
-		* data->info.scenes->light->brightness_ratio;
+	light_direction = vector_subtract(data->info.scenes->light->position,
+				point);
+	intensity = 0.0f;
+	if (shadow(data, point, &light_direction))
+		intensity = fmax(0.0, vector_dot(plane->direction, light_direction))
+			* data->info.scenes->light->brightness_ratio;
 	intensity += data->info.scenes->ambient->ratio;
 	intensity = fmin(1.0, intensity);
 	r = (int)((float)((plane->rgb >> 16) & 0xFF) * intensity);
@@ -187,10 +213,12 @@ int	calculate_cylinder_lighting(t_vector3 point, t_cylinder *cyl, t_data *data)
 	proj = vector_add(cyl->center, scale(cyl->axis,
 				vector_dot(vector_subtract(point, cyl->center), cyl->axis)));
 	normal = vector_normalize(vector_subtract(point, proj));
-	light_dir = vector_normalize(vector_subtract(data->info.scenes->light->position,
-				point));
-	intensity = fmax(0.0, vector_dot(normal, light_dir))
-		* data->info.scenes->light->brightness_ratio;
+	light_dir = vector_subtract(data->info.scenes->light->position,
+				point);
+	intensity = 0.0f;
+	if (shadow(data, point, &light_dir))
+		intensity = fmax(0.0, vector_dot(normal, light_dir))
+			* data->info.scenes->light->brightness_ratio;
 	intensity += data->info.scenes->ambient->ratio;
 	intensity = fmin(1.0, intensity);
 	r = fmin(255, fmax(0, (int)((float)((cyl->rgb >> 16) & 0xFF)

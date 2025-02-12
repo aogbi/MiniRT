@@ -6,13 +6,13 @@
 #    By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/17 18:19:59 by rpinto-r          #+#    #+#              #
-#    Updated: 2025/02/10 18:59:50 by aogbi            ###   ########.fr        #
+#    Updated: 2025/02/11 19:00:59 by aogbi            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 ### VARIABLES ###
 CC               = gcc
-CFLAGS           = -Werror -Wextra -Wall
+CFLAGS           = #-Werror -Wextra -Wall
 CDEBUG           = -g3 -fsanitize=address
 RM               = rm -rf
 NAME             = minirt
