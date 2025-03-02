@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/13 02:55:46 by yhadhadi          #+#    #+#             */
-/*   Updated: 2025/02/10 19:17:04 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/03/02 01:04:31 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # include <stdint.h>
 # include <limits.h>
 # include <math.h>
-
 
 typedef unsigned char	t_byte;
 
@@ -181,8 +180,6 @@ int		ft_stackrrot(t_stack *stack)
 		__attribute__((nonnull(1)));
 int		ft_stackswap(t_stack *stack)
 		__attribute__((nonnull(1)));
-float	ft_atod(char *str);
-
 # endif
 
 # ifndef NO_LIBFT_ADDONS

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aogbi <aogbi@student.42.fr>                +#+  +:+       +#+         #
+#    By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/16 00:40:09 by yhadhadi          #+#    #+#              #
-#    Updated: 2025/01/02 03:18:31 by aogbi            ###   ########.fr        #
+#    Updated: 2025/03/02 01:08:04 by aogbi            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,8 +81,8 @@ SRCS := ft_abs.c\
 	ft_ultoa_base.c\
 	ft_utoa_base.c\
 	ft_utoa.c\
-	ft_vstriteri.c\
-	ft_atod.c
+	ft_vstriteri.c
+
 OBJS := $(SRCS:%.c=$(OBJSDIR)/%.o)
 
 # Bonus files

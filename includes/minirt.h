@@ -6,7 +6,7 @@
 /*   By: aogbi <aogbi@student.1337.ma>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 16:52:26 by aogbi             #+#    #+#             */
-/*   Updated: 2025/02/12 20:48:48 by aogbi            ###   ########.fr       */
+/*   Updated: 2025/03/02 01:04:12 by aogbi            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <mlx.h>
 # include <stdio.h>
 
-# define WIDTH 1924
+# define WIDTH 1024
 # define EPSILON 0.001F
 
 typedef struct s_img
@@ -37,7 +37,9 @@ typedef struct s_img
 
 typedef struct s_vector3
 {
-	float x, y, z;
+	float	x;
+	float	y;
+	float	z;
 }						t_vector3;
 
 typedef struct s_ambient_lightning
@@ -107,8 +109,7 @@ typedef struct s_save
 	t_sphere			*sphere;
 	t_plane				*plane;
 	t_cylinder			*cylinder;
-}	t_save;
-
+}						t_save;
 
 typedef struct s_info
 {
@@ -139,6 +140,7 @@ t_vector3				vector_subtract(t_vector3 v1, t_vector3 v2);
 float					vector_dot(t_vector3 v1, t_vector3 v2);
 t_vector3				vector_add(t_vector3 a, t_vector3 b);
 t_vector3				vector_normalize(t_vector3 v);
+t_vector3				vector_cross(t_vector3 a, t_vector3 b);
 float					ray_sphere_intersect(t_ray ray, t_sphere *sphere);
 t_vector3				scale(t_vector3 v, float scalar);
 t_scenes				*scene_description(char *file_name);
@@ -146,7 +148,32 @@ void					free_scenes(t_scenes *scenes);
 bool					vector3_equal(t_vector3 a, t_vector3 b);
 int						close_intersect(t_data *data, t_ray ray);
 int						render(t_data *data);
-float	spheres_while(t_ray ray, t_data *data);
-float	plane_while(t_ray ray, t_data *data);
-float	cyl_while(t_ray ray, t_data *data);
+float					spheres_while(t_ray ray, t_data *data);
+float					plane_while(t_ray ray, t_data *data);
+float					cyl_while(t_ray ray, t_data *data);
+float					ray_plane_intersect(t_ray ray, t_plane plane);
+float					intersect_cylinder(t_ray ray, t_cylinder *cyl);
+int						calculate_plane_lighting(t_vector3 point,
+							t_plane *plane, t_data *data);
+int						calculate_sphere_lighting(t_vector3 point,
+							t_sphere *sphere, t_data *data);
+int						calculate_cylinder_lighting(t_vector3 point,
+							t_cylinder *cyl, t_data *data);
+bool					shadow(t_data *data, t_vector3 point,
+							t_vector3 *light_direction);
+float					vector_length(t_vector3 v);
+void					hooks(t_data *data);
+t_vector3				coordinates(char **array, int *flag);
+int						ft_isfloat(char *str);
+int						ft_isnum(char *str);
+void					ft_str_array_free(char **array);
+int						count_str_array(char **array);
+int						init_ambient(char **array, t_scenes *scenes);
+int						init_camera(char **array, t_scenes *scenes);
+int						init_light(char **array, t_scenes *scenes);
+int						init_sphere(char **array, t_scenes *scenes);
+int						init_plane(char **array, t_scenes *scenes);
+int						init_cylinder(char **array, t_scenes *scenes);
+int						colors_range(char *str);
+float					ft_atod(char *str);
 #endif
