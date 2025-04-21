@@ -11,7 +11,8 @@ Ambient, diffuse, and specular lighting
 Shadows
 Camera movement
 BMP screenshot saving
-<!-- Optional if you have one -->
+<div align="center"><img src="map/snowman.png" /></div>
+<div align="center"><img src="map/room.png" /></div>
 
 ##          🚀 How to Run
 
